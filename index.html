@@ -11,7 +11,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDKs for Realtime Database (Lightweight & Super Fast) -->
+    <!-- Firebase SDKs for Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
@@ -825,29 +825,31 @@
         }
 
         .attachment-pill {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 0.25rem 0.65rem;
-            border-radius: 6px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #1e293b;
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            padding: 0.3rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #14532d;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.4rem;
             cursor: pointer;
             transition: var(--transition);
-            max-width: 160px;
+            max-width: 170px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .attachment-pill:hover {
-            background: #e2e8f0;
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-1px);
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #0f5132;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .attachment-remove-btn {
@@ -1352,7 +1354,7 @@
                             <th style="width: 100px; text-align: center;">الأولوية</th>
                             <th style="width: 120px; text-align: center;">تاريخ الطلب</th>
                             <th style="width: 120px; text-align: center;">تاريخ إنتهائه</th>
-                            <th style="width: 150px; text-align: center;">ملف الإنجاز (Attach)</th>
+                            <th style="width: 170px; text-align: center;">ملف الإنجاز (Attach)</th>
                             <th style="width: 90px; text-align: center;">إجراءات</th>
                         </tr>
                     </thead>
@@ -1368,7 +1370,7 @@
         </section>
     </main>
 
-    <!-- Attach Modal (Ultra Fast Local-to-Cloud Sync) -->
+    <!-- Attach Modal -->
     <div class="modal-backdrop" id="attachModal">
         <div class="modal">
             <div class="modal-header">
@@ -1384,7 +1386,7 @@
                 <div class="drop-zone" onclick="document.getElementById('fileInputModal').click()">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                     <p>انقر لاختيار ملف من جهازك أو اسحبه هنا</p>
-                    <span style="display: block; margin-top: 0.25rem; font-weight: 700; color: var(--primary);">رفع فوري وسريع (Excel, PDF, Word, صور وتقارير)</span>
+                    <span style="display: block; margin-top: 0.25rem; font-weight: 700; color: var(--primary);">حفظ وتزامن فوري بين الأجهزة (Excel, PDF, Word, صور)</span>
                 </div>
 
                 <div id="selectedFileInfo" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius-sm); padding: 0.75rem 1rem; align-items: center; justify-content: space-between;">
@@ -1494,8 +1496,8 @@
             measurementId: "G-XQLRML6WFZ"
         };
 
-        const STORAGE_KEY = "watania_multi_dept_tasks_v11";
-        const ENTRY_KEY = "watania_portal_entered_v11";
+        const STORAGE_KEY = "watania_multi_dept_tasks_v12";
+        const ENTRY_KEY = "watania_portal_entered_v12";
 
         // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
@@ -1637,6 +1639,22 @@
             document.getElementById('welcomeGateScreen').style.display = 'flex';
         }
 
+        function normalizeTasksData(data) {
+            if (!data || typeof data !== 'object') {
+                return JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+            }
+            ['industrial', 'poultry', 'inventory'].forEach(dept => {
+                if (!data[dept]) {
+                    data[dept] = { id: dept, name: DEPT_META[dept].name, tasks: [] };
+                } else if (!data[dept].tasks) {
+                    data[dept].tasks = [];
+                } else if (!Array.isArray(data[dept].tasks)) {
+                    data[dept].tasks = Object.values(data[dept].tasks);
+                }
+            });
+            return data;
+        }
+
         function loadAllData() {
             const cloudTag = document.getElementById('cloudStatusTag');
 
@@ -1663,7 +1681,7 @@
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 try {
-                    allTasksData = JSON.parse(saved);
+                    allTasksData = normalizeTasksData(JSON.parse(saved));
                 } catch (e) {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
                 }
@@ -1687,10 +1705,11 @@
                 cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن لحظي بين الأجهزة)';
 
                 if (val) {
-                    allTasksData = val;
+                    allTasksData = normalizeTasksData(val);
                 } else {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                    dbRef.set(allTasksData);
+                    const cleanObj = JSON.parse(JSON.stringify(allTasksData));
+                    dbRef.set(cleanObj);
                 }
 
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
@@ -1711,11 +1730,15 @@
         }
 
         async function saveAllData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
+            allTasksData = normalizeTasksData(allTasksData);
+            const cleanObj = JSON.parse(JSON.stringify(allTasksData));
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanObj));
             
             if (isFirebaseActive && dbRef) {
                 try {
-                    await dbRef.set(allTasksData);
+                    await dbRef.set(cleanObj);
+                    console.log("Successfully committed to Firebase Realtime Database!");
                 } catch (e) {
                     console.error("Error saving to Realtime Database:", e);
                 }
@@ -1759,6 +1782,7 @@
         }
 
         function getActiveDepartmentTasks() {
+            allTasksData = normalizeTasksData(allTasksData);
             if (currentDept === 'all') {
                 let combined = [];
                 ['industrial', 'poultry', 'inventory'].forEach(dept => {
@@ -1812,7 +1836,7 @@
                     const matchTitle = (t.title || '').toLowerCase().includes(searchVal);
                     const matchDate = (t.requestDate && t.requestDate.includes(searchVal)) || (t.completionDate && t.completionDate.includes(searchVal));
                     const matchDept = (t.deptName && t.deptName.toLowerCase().includes(searchVal));
-                    const matchAttach = (t.attachment && t.attachment.name.toLowerCase().includes(searchVal));
+                    const matchAttach = (t.attachment && t.attachment.name && t.attachment.name.toLowerCase().includes(searchVal));
                     return matchTitle || matchDate || matchDept || matchAttach;
                 }
                 return true;
@@ -1864,7 +1888,8 @@
                 let attachmentCell = '';
                 if (t.attachment && t.attachment.name) {
                     let fileIcon = 'fa-file';
-                    const ext = t.attachment.name.split('.').pop().toLowerCase();
+                    const fileName = t.attachment.name;
+                    const ext = fileName.split('.').pop().toLowerCase();
                     if (['pdf'].includes(ext)) fileIcon = 'fa-file-pdf text-danger';
                     else if (['xlsx', 'xls', 'csv'].includes(ext)) fileIcon = 'fa-file-excel text-success';
                     else if (['docx', 'doc'].includes(ext)) fileIcon = 'fa-file-word text-primary';
@@ -1873,8 +1898,8 @@
                     attachmentCell = `
                         <td style="text-align: center;">
                             <div class="attachment-container">
-                                <span class="attachment-pill" onclick="downloadAttachment('${t.deptKey}', '${t.id}')" title="تحميل الملف (${t.attachment.size || ''})">
-                                    <i class="fa-solid ${fileIcon}"></i> ${escapeHtml(t.attachment.name)}
+                                <span class="attachment-pill" onclick="downloadAttachment('${t.deptKey}', '${t.id}')" title="انقر لتحميل الملف (${t.attachment.size || ''})">
+                                    <i class="fa-solid ${fileIcon}"></i> ${escapeHtml(fileName)}
                                 </span>
                                 <i class="fa-solid fa-circle-xmark attachment-remove-btn" onclick="removeAttachment('${t.deptKey}', '${t.id}')" title="حذف المرفق"></i>
                             </div>
@@ -1949,7 +1974,7 @@
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             if (task.status === 'تم') {
@@ -1970,7 +1995,7 @@
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             const order = ['لم تنتهي', 'جارى العمل', 'تم', 'تم الإلغاء'];
@@ -1988,7 +2013,7 @@
         function openAttachModal(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             document.getElementById('attachDeptKey').value = deptKey;
@@ -2019,7 +2044,7 @@
                 loadedAttachmentObject = {
                     name: file.name,
                     size: formatBytes(file.size),
-                    type: file.type,
+                    type: file.type || 'application/octet-stream',
                     data: e.target.result,
                     date: new Date().toISOString().split('T')[0]
                 };
@@ -2042,7 +2067,7 @@
             const taskId = document.getElementById('attachTaskId').value;
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             task.attachment = loadedAttachmentObject;
@@ -2062,7 +2087,7 @@
         function removeAttachment(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task || !task.attachment) return;
 
             if (confirm(`هل أنت متأكد من حذف المرفق:\n"${task.attachment.name}"`)) {
@@ -2075,13 +2100,13 @@
         function downloadAttachment(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task || !task.attachment) return;
 
             if (task.attachment.data) {
                 const link = document.createElement('a');
                 link.href = task.attachment.data;
-                link.download = task.attachment.name;
+                link.download = task.attachment.name || 'attachment';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -2115,7 +2140,7 @@
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> تعديل المهمة';
@@ -2155,7 +2180,7 @@
             const deptList = allTasksData[deptKey].tasks;
 
             if (idVal) {
-                const task = deptList.find(t => String(t.id) === String(idVal));
+                const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(idVal)) : null;
                 if (task) {
                     task.title = title;
                     task.status = status;
@@ -2186,7 +2211,7 @@
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
-            const task = deptList.find(t => String(t.id) === String(taskId));
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
             if (confirm(`هل أنت متأكد من حذف المهمة:\n"${task.title}"`)) {
