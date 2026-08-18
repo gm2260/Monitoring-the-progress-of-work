@@ -11,10 +11,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDKs for Realtime Database & Storage -->
+    <!-- Firebase SDKs for Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
     <style>
         :root {
@@ -597,6 +596,7 @@
         .search-input:focus {
             outline: none;
             border-color: var(--primary);
+            background: #ffffff;
             box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.12);
         }
 
@@ -842,28 +842,28 @@
             overflow: hidden;
             text-overflow: ellipsis;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }}
+        }
 
-        .attachment-pill:hover {{
+        .attachment-pill:hover {
             background: #dcfce7;
             border-color: #16a34a;
             color: #0f5132;
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }}
+        }
 
-        .attachment-remove-btn {{
+        .attachment-remove-btn {
             color: #94a3b8;
             cursor: pointer;
             margin-right: 0.2rem;
             transition: var(--transition);
-        }}
+        }
 
-        .attachment-remove-btn:hover {{
+        .attachment-remove-btn:hover {
             color: #dc2626;
-        }}
+        }
 
-        .btn-attach-add {{
+        .btn-attach-add {
             background: #ffffff;
             border: 1px dashed #cbd5e1;
             color: var(--text-muted);
@@ -877,21 +877,21 @@
             align-items: center;
             gap: 0.3rem;
             font-family: inherit;
-        }}
+        }
 
-        .btn-attach-add:hover {{
+        .btn-attach-add:hover {
             border-color: var(--primary);
             color: var(--primary);
             background: #f0fdf4;
-        }}
+        }
 
-        .action-btn-group {{
+        .action-btn-group {
             display: flex;
             align-items: center;
             gap: 0.4rem;
-        }}
+        }
 
-        .action-icon-btn {{
+        .action-icon-btn {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
@@ -903,33 +903,33 @@
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
-        }}
+        }
 
-        .action-icon-btn:hover {{
+        .action-icon-btn:hover {
             background: #f1f5f9;
             color: var(--text-main);
-        }}
+        }
 
-        .action-icon-btn.delete-btn:hover {{
+        .action-icon-btn.delete-btn:hover {
             background: #fee2e2;
             color: #dc2626;
             border-color: #fca5a5;
-        }}
+        }
 
-        .empty-state {{
+        .empty-state {
             padding: 3.5rem 1.5rem;
             text-align: center;
             color: var(--text-muted);
-        }}
+        }
 
-        .empty-state i {{
+        .empty-state i {
             font-size: 3.5rem;
             color: #cbd5e1;
             margin-bottom: 1rem;
-        }}
+        }
 
         /* Modals */
-        .modal-backdrop {{
+        .modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
@@ -942,13 +942,13 @@
             justify-content: center;
             z-index: 1000;
             padding: 1rem;
-        }}
+        }
 
-        .modal-backdrop.active {{
+        .modal-backdrop.active {
             display: flex;
-        }}
+        }
 
-        .modal {{
+        .modal {
             background: #ffffff;
             border-radius: var(--radius-lg);
             width: 100%;
@@ -956,64 +956,64 @@
             box-shadow: var(--shadow-lg);
             overflow: hidden;
             animation: modalSlideIn 0.3s ease;
-        }}
+        }
 
-        @keyframes modalSlideIn {{
-            from {{ opacity: 0; transform: translateY(20px) scale(0.97); }}
-            to {{ opacity: 1; transform: translateY(0); }}
-        }}
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .modal-header {{
+        .modal-header {
             padding: 1.25rem 1.5rem;
             background: #f8fafc;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }}
+        }
 
-        .modal-header h3 {{
+        .modal-header h3 {
             font-size: 1.15rem;
             font-weight: 800;
             color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }}
+        }
 
-        .modal-close {{
+        .modal-close {
             background: none;
             border: none;
             font-size: 1.25rem;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
-        }}
+        }
 
-        .modal-close:hover {{
+        .modal-close:hover {
             color: #dc2626;
-        }}
+        }
 
-        .modal-body {{
+        .modal-body {
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.1rem;
-        }}
+        }
 
-        .form-group {{
+        .form-group {
             display: flex;
             flex-direction: column;
             gap: 0.4rem;
-        }}
+        }
 
-        .form-label {{
+        .form-label {
             font-size: 0.88rem;
             font-weight: 800;
             color: #334155;
-        }}
+        }
 
-        .form-control {{
+        .form-control {
             width: 100%;
             padding: 0.65rem 0.9rem;
             border: 1px solid var(--border-color);
@@ -1022,62 +1022,62 @@
             font-size: 0.92rem;
             background: #ffffff;
             transition: var(--transition);
-        }}
+        }
 
-        .form-control:focus {{
+        .form-control:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.12);
-        }}
+        }
 
-        .form-row {{
+        .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
-        }}
+        }
 
-        .drop-zone {{
+        .drop-zone {
             border: 2px dashed #cbd5e1;
             border-radius: var(--radius-md);
-            padding: 1.75rem 1.5rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             cursor: pointer;
             background: #f8fafc;
             transition: var(--transition);
-        }}
+        }
 
-        .drop-zone:hover {{
+        .drop-zone:hover {
             border-color: var(--primary);
             background: #f0fdf4;
-        }}
+        }
 
-        .drop-zone i {{
-            font-size: 2.3rem;
+        .drop-zone i {
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 0.6rem;
-        }}
+            margin-bottom: 0.75rem;
+        }
 
-        .drop-zone p {{
+        .drop-zone p {
             font-size: 0.9rem;
             font-weight: 700;
             color: var(--text-main);
-        }}
+        }
 
-        .drop-zone span {{
+        .drop-zone span {
             font-size: 0.78rem;
             color: var(--text-muted);
-        }}
+        }
 
-        .modal-footer {{
+        .modal-footer {
             padding: 1rem 1.5rem;
             background: #f8fafc;
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
             gap: 0.75rem;
-        }}
+        }
 
-        .toast {{
+        .toast {
             position: fixed;
             bottom: 2rem;
             left: 2rem;
@@ -1095,19 +1095,19 @@
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }}
+        }
 
-        .toast.show {{
+        .toast.show {
             transform: translateY(0);
             opacity: 1;
-        }}
+        }
 
-        .toast.success {{
+        .toast.success {
             background: #0f5132;
             border-right: 4px solid #34d399;
-        }}
+        }
 
-        .footer {{
+        .footer {
             background: #ffffff;
             border-top: 1px solid var(--border-color);
             padding: 1.25rem;
@@ -1116,33 +1116,33 @@
             font-weight: 600;
             color: var(--text-muted);
             margin-top: auto;
-        }}
+        }
 
-        @media (max-width: 768px) {{
-            .header-container {{
+        @media (max-width: 768px) {
+            .header-container {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
-            }}
-            .header-actions {{
+            }
+            .header-actions {
                 width: 100%;
                 justify-content: space-between;
                 flex-wrap: wrap;
-            }}
-            .form-row {{
+            }
+            .form-row {
                 grid-template-columns: 1fr;
-            }}
-            .controls-card {{
+            }
+            .controls-card {
                 flex-direction: column;
                 align-items: stretch;
-            }}
-            .filter-group {{
+            }
+            .filter-group {
                 justify-content: flex-start;
-            }}
-            .depts-preview-grid {{
+            }
+            .depts-preview-grid {
                 grid-template-columns: 1fr;
-            }}
-        }}
+            }
+        }
     </style>
 </head>
 <body>
@@ -1370,7 +1370,7 @@
         </section>
     </main>
 
-    <!-- Attach Modal (Direct Cloud Sync) -->
+    <!-- Attach Modal -->
     <div class="modal-backdrop" id="attachModal">
         <div class="modal">
             <div class="modal-header">
@@ -1382,12 +1382,11 @@
                 <input type="hidden" id="attachTaskId">
                 <p id="attachTaskTitle" style="font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem;"></p>
                 
-                <!-- Option 1: File selector -->
                 <input type="file" id="fileInputModal" style="display: none;" onchange="handleFileSelected(event)">
                 <div class="drop-zone" onclick="document.getElementById('fileInputModal').click()">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                     <p>انقر لاختيار ملف من جهازك أو اسحبه هنا</p>
-                    <span>يدعم جميع الصيغ (Excel, PDF, Word, صور وتقارير)</span>
+                    <span style="display: block; margin-top: 0.25rem; font-weight: 700; color: var(--primary);">حفظ وتزامن فوري بين الأجهزة (Excel, PDF, Word, صور)</span>
                 </div>
 
                 <div id="selectedFileInfo" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius-sm); padding: 0.75rem 1rem; align-items: center; justify-content: space-between;">
@@ -1401,16 +1400,6 @@
                     <button class="action-icon-btn delete-btn" onclick="clearSelectedFile()" title="إلغاء الملف">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
-                </div>
-
-                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-                    <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
-                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">أو ضع رابط خارجي للملف</span>
-                    <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="url" id="attachExternalUrlInput" class="form-control" placeholder="رابط Google Drive أو OneDrive أو رابط ملف مباشر..." oninput="handleUrlInputChanged()">
                 </div>
             </div>
             <div class="modal-footer">
@@ -1496,188 +1485,271 @@
         // ==========================================
         // 1. إعدادات Firebase Realtime Database
         // ==========================================
-        const firebaseConfig = {firebase_config_js};
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdOHkYiVGhGDOoo8aClp_5e1u5NHX65U",
+            authDomain: "watania-industrial-tasks.firebaseapp.com",
+            databaseURL: "https://watania-industrial-tasks-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "watania-industrial-tasks",
+            storageBucket: "watania-industrial-tasks.firebasestorage.app",
+            messagingSenderId: "913013838380",
+            appId: "1:913013838380:web:38cebc6a242394a8523359",
+            measurementId: "G-XQLRML6WFZ"
+        };
 
-        const STORAGE_KEY = "watania_multi_dept_tasks_v15";
-        const ENTRY_KEY = "watania_portal_entered_v15";
+        const STORAGE_KEY = "watania_multi_dept_tasks_v12";
+        const ENTRY_KEY = "watania_portal_entered_v12";
 
         // Initial Data for all 3 departments
-        const INITIAL_DEPTS_DATA = {depts_json};
+        const INITIAL_DEPTS_DATA = {
+  "industrial": {
+    "id": "industrial",
+    "name": "القسم الصناعي",
+    "icon": "fa-industry",
+    "tasks": [
+      {"id": "ind_1", "title": "1. ساعات تشغيل الصنف الجديد مجمد فيليه أرجل الدجاج", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_2", "title": "2. إجتماعات الإدارات ولايشترط جميع الإدارات خلال هذا الشهر .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_3", "title": "3. دراسة الفيليه والأجزاء المشكله", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_4", "title": "4. مراجعة الإنحرافات وتحليلها", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_5", "title": "5. ربحية منتجات المصنعات خلال النصف الأول 2026", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_6", "title": "6. تقرير مصاريف الكهرباء خلال 2026", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_8", "title": "8. إنشاء تقرير توزيع الكهرباء الجديد", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_9", "title": "9. إنشاء تقرير توزيع المياه الجديد", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_10", "title": "10. تقرير يوضح الصيانه على مستوي المعده ( موجود على إنكورتا) تحليله لمعرفة المعدات ذات الصيانه المرتفعه .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_11", "title": "11. تقرير عدد مرات تغير زيت وتركيب كفرات وبطاريات خلال 6 شهور على مستوي المعده .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_12", "title": "12. تقرير مدخلات ومخرجات البروتين", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_13", "title": "13. تعديل طريقة توزيع الكهرباء حسب المستفيد من كل محطة", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_14", "title": "14. تقرير متابعة إنتاج المنتج التام خلال الفتره قبل الإغلاق .", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_15", "title": "15. تحديث البومات ( مسالخ )", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_16", "title": "16. تحديث البومات ( مصنعات )", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_17", "title": "17. تحديث الراوتنج مسالخ", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_18", "title": "18. تحديث دراسة العلف", "status": "تم الإلغاء", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_19", "title": "19. الإجراءات المترتبه علي نقل تشغيل مسلخ1 إلى مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_20", "title": "20. تعديل هيكل مراكز تكلفة إدارة الكهرباء ومتطلبات مشروع صيانة الكهرباء", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_21", "title": "21- أليه جديدة على النظام لتحميل الصويا جزء من مصاريف ينبع", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_22", "title": "22- عينات من نظام العلف", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_23", "title": "23- Break Even", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_24", "title": "24- تجارب التشفيه في مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_25", "title": "25- المطلوب في إيميل الورش المركزيه ( تقرير الصيانه على مستوي المعده & فترة الصيانه& عينات من الأوامر المفتوحه & مراجعة الأوامر ذات التكلفه العاليه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_26", "title": "26- هيكل مراكز التكلفه في مياه الابار", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_27", "title": "27- إعادة توزيع الجوده", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_28", "title": "28- توزيع خدمات الجدود ( ضرورة التوزيع بحسابات الخدمات) .", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_29", "title": "29- تعديل دورة توزيع الكهرباء على النظام بعد إنشاء وتعديل مراكز التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_30", "title": "30- دراسة تخفيض التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_31", "title": "31- دراسة تأثير الطاقه العاطله على منتجات المصنعات", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
+    ]
+  },
+  "poultry": {
+    "id": "poultry",
+    "name": "القسم الداجني",
+    "icon": "fa-egg",
+    "tasks": [
+      {"id": "pou_1", "title": "1- دراسة التكلفة المعياريه للمراحل Creat Model", "status": "جارى العمل", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_2", "title": "2- دراسة تأثير ارتفاع أرسعار الخامات على تكلفة المراحل كلها", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_3", "title": "3- مشكلة حسابات إنتاج تحت التشغيل وتحميل إنحراف مرحلة ماقبل الإنتاج على حساب WiP تربيه", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_4", "title": "4- تقرير يوضح أداء القطعان على مستوي القطيع قبل إنتهائه", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_5", "title": "5- تحديث بومات البياض( أصناف الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_6", "title": "6- تحديث بومات الأمهات( الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_7", "title": "7- دورة إنتاج النخيل على النظام", "status": "تم الإلغاء", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_8", "title": "8- التحصينات اللى بيتم صرفها للجدود من الأمهات", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "pou_9", "title": "9- بيع العلف لشركة الجدود بدل من تحويله بالتكلفه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "pou_10", "title": "10- موضوع إستلام بيض الفرزه في الجدود", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_11", "title": "11- إنشاء مركز تكلفة جديد للـــــــPCT في اللاحم", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_12", "title": "12- إنشاء مرحلة ماقبل الإنتاج في البياض Pre", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_13", "title": "13-الوصف الوظيفي والمهام لأقسام الإدارة", "status": "تم", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_14", "title": "14- ألية متابعة إنحراف الكميه ( الإستهلاك) في أوامر الإنتاج على النظام ( أوامر الإنتاج نوع YPP4)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_15", "title": "15-تقرير أداء القطعان بالأسبوع ( معياري)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_16", "title": "16-دراسة أثر ارتفاع أسعار Cobb على تكلفة صوص الأمهات وصوص اللاحم", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_17", "title": "17- حصر متطلبات أتمتة التقارير على إنكورتا", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_18", "title": "18- دراسة تخفيض التكاليف", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_19", "title": "19- دراسة تطوير المزارع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
+    ]
+  },
+  "inventory": {
+    "id": "inventory",
+    "name": "مراقبة المخزون",
+    "icon": "fa-warehouse",
+    "tasks": [
+      {"id": "inv_1", "title": "1. عدادات سيارات نقل الديزل للمزارع", "status": "لم تنتهي", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_2", "title": "2- مراجعة الدورة المستنديه لمرتجعات البطارات والكفرات", "status": "لم تنتهي", "requestDate": "2026-04-02", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_3", "title": "3- تغيير ألية صرف الديزل للمواقع الإنتاجيه", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_4", "title": "4- إنشاء Source List للأصناف خارج البوم", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_5", "title": "5- تقرير YCO024 على إنكورتا", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_6", "title": "6- تقرير المخزون في فترات سابقه بالكرتون وبالكيلو", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_7", "title": "7- تقرير مقارنه أسعار الخامات خلال فترات زمنيه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_8", "title": "8- أليه تحديد مخزون نهاية الفتره للديزل في المواقع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_9", "title": "9- تقرير تكلفة التخزين", "status": "جارى العمل", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_10", "title": "10- إنشاء إجراء مخصص فاقد الذره في ينبع", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"}
+    ]
+  }
+};
 
         let dbRef = null;
-        let attachDbRef = null;
         let isFirebaseActive = false;
         let currentDept = 'industrial';
         let currentStatusFilter = 'all';
-        let allTasksData = {{}};
-        let loadedAttachmentData = null;
+        let allTasksData = {};
+        let loadedAttachmentObject = null;
 
-        const DEPT_META = {{
-            "industrial": {{
+        const DEPT_META = {
+            "industrial": {
                 name: "القسم الصناعي",
                 subtitle: "متابعة خطة العمل والإنجازات الخاصة بالقسم الصناعي",
                 icon: "fa-industry"
-            }},
-            "poultry": {{
+            },
+            "poultry": {
                 name: "القسم الداجني",
                 subtitle: "متابعة خطة العمل والإنجازات الخاصة بالقسم الداجني",
                 icon: "fa-egg"
-            }},
-            "inventory": {{
+            },
+            "inventory": {
                 name: "مراقبة المخزون",
                 subtitle: "متابعة مهام وإجراءات وتقارير مراقبة المخزون",
                 icon: "fa-warehouse"
-            }},
-            "all": {{
+            },
+            "all": {
                 name: "جميع الإدارات",
                 subtitle: "لوحة تحكم موحدة تشمل مهام جميع الإدارات والأقسام",
                 icon: "fa-list-check"
-            }}
-        }};
+            }
+        };
 
-        function checkEntryStatus() {{
+        function checkEntryStatus() {
             const isEntered = sessionStorage.getItem(ENTRY_KEY);
-            if (isEntered === 'true') {{
+            if (isEntered === 'true') {
                 document.getElementById('welcomeGateScreen').style.display = 'none';
-            }} else {{
+            } else {
                 document.getElementById('welcomeGateScreen').style.display = 'flex';
-            }}
+            }
 
-            if (navigator.storage && navigator.storage.persist) {{
-                navigator.storage.persist().then(persistent => {{
+            if (navigator.storage && navigator.storage.persist) {
+                navigator.storage.persist().then(persistent => {
                     if (persistent) console.log("Persistent storage granted.");
-                }});
-            }}
-        }}
+                });
+            }
+        }
 
-        function enterDashboard() {{
+        function enterDashboard() {
             sessionStorage.setItem(ENTRY_KEY, 'true');
             document.getElementById('welcomeGateScreen').style.display = 'none';
             showToast('مرحباً بك في واجهة مهام العمل!', 'success');
-        }}
+        }
 
-        function exitToWelcomeScreen() {{
+        function exitToWelcomeScreen() {
             sessionStorage.removeItem(ENTRY_KEY);
             document.getElementById('welcomeGateScreen').style.display = 'flex';
-        }}
+        }
 
-        // =========================================
-        // DATA NORMALIZATION
-        // =========================================
-        function normalizeTasksData(data) {{
-            if (!data || typeof data !== 'object') {{
+        function normalizeTasksData(data) {
+            if (!data || typeof data !== 'object') {
                 return JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-            }}
-            ['industrial', 'poultry', 'inventory'].forEach(dept => {{
-                if (!data[dept]) {{
-                    data[dept] = {{ id: dept, name: DEPT_META[dept].name, tasks: [] }};
-                }} else if (!data[dept].tasks) {{
+            }
+            ['industrial', 'poultry', 'inventory'].forEach(dept => {
+                if (!data[dept]) {
+                    data[dept] = { id: dept, name: DEPT_META[dept].name, tasks: [] };
+                } else if (!data[dept].tasks) {
                     data[dept].tasks = [];
-                }} else if (!Array.isArray(data[dept].tasks)) {{
+                } else if (!Array.isArray(data[dept].tasks)) {
                     data[dept].tasks = Object.values(data[dept].tasks);
-                }}
-            }});
+                }
+            });
             return data;
-        }}
+        }
 
-        // =========================================
-        // INITIALIZE FIREBASE & REALTIME SYNC
-        // =========================================
-        function loadAllData() {{
+        function loadAllData() {
             const cloudTag = document.getElementById('cloudStatusTag');
 
-            if (firebaseConfig.databaseURL) {{
-                try {{
-                    if (!firebase.apps.length) {{
+            if (firebaseConfig.databaseURL) {
+                try {
+                    if (!firebase.apps.length) {
                         firebase.initializeApp(firebaseConfig);
-                    }}
+                    }
                     const database = firebase.database();
                     dbRef = database.ref('watania_tasks_data');
-                    attachDbRef = database.ref('watania_attachments');
                     isFirebaseActive = true;
                     
                     listenToRealtimeDatabase();
                     return;
-                }} catch (err) {{
+                } catch (err) {
                     console.error("Firebase init error:", err);
                     setCloudStatusError("خطأ في الاتصال");
-                }}
-            }}
+                }
+            }
             loadFromLocalStorage();
-        }}
+        }
 
-        function loadFromLocalStorage() {{
+        function loadFromLocalStorage() {
             const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {{
-                try {{
+            if (saved) {
+                try {
                     allTasksData = normalizeTasksData(JSON.parse(saved));
-                }} catch (e) {{
+                } catch (e) {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                }}
-            }} else {{
+                }
+            } else {
                 allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
                 saveAllData();
-            }}
+            }
 
             updateTabBadges();
             updateKPIs();
             filterAndRenderTasks();
-        }}
+        }
 
-        function listenToRealtimeDatabase() {{
+        function listenToRealtimeDatabase() {
             const cloudTag = document.getElementById('cloudStatusTag');
 
-            dbRef.on('value', (snapshot) => {{
+            dbRef.on('value', (snapshot) => {
                 const val = snapshot.val();
                 
                 cloudTag.className = "cloud-badge connected";
-                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن فوري بين الأجهزة)';
+                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن لحظي بين الأجهزة)';
 
-                if (val) {{
+                if (val) {
                     allTasksData = normalizeTasksData(val);
-                }} else {{
+                } else {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
                     const cleanObj = JSON.parse(JSON.stringify(allTasksData));
                     dbRef.set(cleanObj);
-                }}
+                }
 
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
                 updateTabBadges();
                 updateKPIs();
                 filterAndRenderTasks();
-            }}, (err) => {{
+            }, (err) => {
                 console.error("Firebase Realtime DB error:", err);
                 setCloudStatusError("قواعد الأمان تحتاج تفعيل");
                 loadFromLocalStorage();
-            }});
-        }}
+            });
+        }
 
-        function setCloudStatusError(msg) {{
+        function setCloudStatusError(msg) {
             const cloudTag = document.getElementById('cloudStatusTag');
             cloudTag.className = "cloud-badge error";
-            cloudTag.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> غير متصل بالسحابة (${{msg}})`;
-        }}
+            cloudTag.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> غير متصل بالسحابة (${msg})`;
+        }
 
-        async function saveAllData() {{
+        async function saveAllData() {
             allTasksData = normalizeTasksData(allTasksData);
             const cleanObj = JSON.parse(JSON.stringify(allTasksData));
             
             localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanObj));
             
-            if (isFirebaseActive && dbRef) {{
-                try {{
+            if (isFirebaseActive && dbRef) {
+                try {
                     await dbRef.set(cleanObj);
-                }} catch (e) {{
-                    console.error("Error saving tasks data to Firebase:", e);
-                }}
-            }}
+                    console.log("Successfully committed to Firebase Realtime Database!");
+                } catch (e) {
+                    console.error("Error saving to Realtime Database:", e);
+                }
+            }
 
             updateTabBadges();
             updateKPIs();
             filterAndRenderTasks();
-        }}
+        }
 
-        function updateTabBadges() {{
+        function updateTabBadges() {
             const indCount = (allTasksData.industrial?.tasks || []).length;
             const pouCount = (allTasksData.poultry?.tasks || []).length;
             const invCount = (allTasksData.inventory?.tasks || []).length;
@@ -1687,52 +1759,46 @@
             document.getElementById('badge-tab-poultry').textContent = pouCount;
             document.getElementById('badge-tab-inventory').textContent = invCount;
             document.getElementById('badge-tab-all').textContent = totalCount;
-        }}
+        }
 
-        // =========================================
-        // DEPARTMENT NAVIGATION
-        // =========================================
-        function switchDepartment(deptKey) {{
+        function switchDepartment(deptKey) {
             currentDept = deptKey;
 
-            document.querySelectorAll('.dept-tab-btn').forEach(btn => {{
+            document.querySelectorAll('.dept-tab-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-dept') === deptKey);
-            }});
+            });
 
             const meta = DEPT_META[deptKey] || DEPT_META['industrial'];
-            document.getElementById('deptTitleDisplay').innerHTML = `<i class="fa-solid ${{meta.icon}}"></i> ${{meta.name}}`;
+            document.getElementById('deptTitleDisplay').innerHTML = `<i class="fa-solid ${meta.icon}"></i> ${meta.name}`;
             document.getElementById('deptSubtitleDisplay').textContent = meta.subtitle;
 
             const deptColHeader = document.getElementById('deptColHeader');
-            if (deptColHeader) {{
+            if (deptColHeader) {
                 deptColHeader.style.display = (deptKey === 'all') ? 'table-cell' : 'none';
-            }}
+            }
 
             updateKPIs();
             filterAndRenderTasks();
-        }}
+        }
 
-        function getActiveDepartmentTasks() {{
+        function getActiveDepartmentTasks() {
             allTasksData = normalizeTasksData(allTasksData);
-            if (currentDept === 'all') {{
+            if (currentDept === 'all') {
                 let combined = [];
-                ['industrial', 'poultry', 'inventory'].forEach(dept => {{
+                ['industrial', 'poultry', 'inventory'].forEach(dept => {
                     const list = allTasksData[dept]?.tasks || [];
-                    list.forEach(t => {{
-                        combined.push({{ ...t, deptKey: dept, deptName: DEPT_META[dept].name }});
-                    }});
-                }});
+                    list.forEach(t => {
+                        combined.push({ ...t, deptKey: dept, deptName: DEPT_META[dept].name });
+                    });
+                });
                 return combined;
-            }} else {{
+            } else {
                 const list = allTasksData[currentDept]?.tasks || [];
-                return list.map(t => ({{ ...t, deptKey: currentDept, deptName: DEPT_META[currentDept].name }}));
-            }}
-        }}
+                return list.map(t => ({ ...t, deptKey: currentDept, deptName: DEPT_META[currentDept].name }));
+            }
+        }
 
-        // =========================================
-        // KPI & PROGRESS CALCULATION
-        // =========================================
-        function updateKPIs() {{
+        function updateKPIs() {
             const currentList = getActiveDepartmentTasks();
             const total = currentList.length;
             const done = currentList.filter(t => t.status === 'تم').length;
@@ -1753,79 +1819,76 @@
             document.getElementById('pill-cancel').textContent = cancel;
 
             const rate = total > 0 ? Math.round((done / total) * 100) : 0;
-            document.getElementById('sub-done-rate').textContent = `${{rate}}% من الإجمالي`;
-            document.getElementById('progress-text').textContent = `${{rate}}% (${{done}} من ${{total}} مهمة)`;
-            document.getElementById('progress-fill').style.width = `${{rate}}%`;
-        }}
+            document.getElementById('sub-done-rate').textContent = `${rate}% من الإجمالي`;
+            document.getElementById('progress-text').textContent = `${rate}% (${done} من ${total} مهمة)`;
+            document.getElementById('progress-fill').style.width = `${rate}%`;
+        }
 
-        // =========================================
-        // FILTER & RENDER TASKS TABLE
-        // =========================================
-        function filterAndRenderTasks() {{
+        function filterAndRenderTasks() {
             const rawList = getActiveDepartmentTasks();
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
             const priorityVal = document.getElementById('priorityFilter').value;
 
-            const filtered = rawList.filter(t => {{
+            const filtered = rawList.filter(t => {
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 if (priorityVal !== 'all' && t.priority !== priorityVal) return false;
-                if (searchVal) {{
+                if (searchVal) {
                     const matchTitle = (t.title || '').toLowerCase().includes(searchVal);
                     const matchDate = (t.requestDate && t.requestDate.includes(searchVal)) || (t.completionDate && t.completionDate.includes(searchVal));
                     const matchDept = (t.deptName && t.deptName.toLowerCase().includes(searchVal));
                     const matchAttach = (t.attachment && t.attachment.name && t.attachment.name.toLowerCase().includes(searchVal));
                     return matchTitle || matchDate || matchDept || matchAttach;
-                }}
+                }
                 return true;
-            }});
+            });
 
             const tbody = document.getElementById('tasksTableBody');
             const emptyState = document.getElementById('emptyState');
 
-            if (filtered.length === 0) {{
+            if (filtered.length === 0) {
                 tbody.innerHTML = '';
                 emptyState.style.display = 'block';
                 return;
-            }}
+            }
 
             emptyState.style.display = 'none';
-            tbody.innerHTML = filtered.map(t => {{
+            tbody.innerHTML = filtered.map(t => {
                 const isDone = t.status === 'تم';
                 let statusBadgeClass = 'badge-pending';
                 let statusIcon = 'fa-clock';
-                if (t.status === 'تم') {{
+                if (t.status === 'تم') {
                     statusBadgeClass = 'badge-done';
                     statusIcon = 'fa-circle-check';
-                }} else if (t.status === 'جارى العمل') {{
+                } else if (t.status === 'جارى العمل') {
                     statusBadgeClass = 'badge-progress';
                     statusIcon = 'fa-rotate';
-                }} else if (t.status === 'تم الإلغاء') {{
+                } else if (t.status === 'تم الإلغاء') {
                     statusBadgeClass = 'badge-cancel';
                     statusIcon = 'fa-ban';
-                }}
+                }
 
                 let priorityClass = 'priority-medium';
                 let priorityIcon = 'fa-circle';
-                if (t.priority === 'عاجل') {{
+                if (t.priority === 'عاجل') {
                     priorityClass = 'priority-urgent';
                     priorityIcon = 'fa-triangle-exclamation';
-                }} else if (t.priority === 'منخفض') {{
+                } else if (t.priority === 'منخفض') {
                     priorityClass = 'priority-low';
                     priorityIcon = 'fa-angles-down';
-                }}
+                }
 
                 const deptCell = (currentDept === 'all') ? `
                     <td style="text-align: center;">
                         <span class="badge" style="background: #f1f5f9; color: #334155; font-size: 0.8rem;">
-                            ${{t.deptName}}
+                            ${t.deptName}
                         </span>
                     </td>
                 ` : '';
 
                 let attachmentCell = '';
-                if (t.attachment && (t.attachment.name || t.attachment.url || t.attachment.hasFile)) {{
+                if (t.attachment && t.attachment.name) {
                     let fileIcon = 'fa-file';
-                    const fileName = t.attachment.name || 'ملف مرفق';
+                    const fileName = t.attachment.name;
                     const ext = fileName.split('.').pop().toLowerCase();
                     if (['pdf'].includes(ext)) fileIcon = 'fa-file-pdf text-danger';
                     else if (['xlsx', 'xls', 'csv'].includes(ext)) fileIcon = 'fa-file-excel text-success';
@@ -1835,103 +1898,100 @@
                     attachmentCell = `
                         <td style="text-align: center;">
                             <div class="attachment-container">
-                                <span class="attachment-pill" onclick="downloadAttachment('${{t.deptKey}}', '${{t.id}}')" title="انقر لتحميل وفتح الملف (${{t.attachment.size || ''}})">
-                                    <i class="fa-solid ${{fileIcon}}"></i> ${{escapeHtml(fileName)}}
+                                <span class="attachment-pill" onclick="downloadAttachment('${t.deptKey}', '${t.id}')" title="انقر لتحميل الملف (${t.attachment.size || ''})">
+                                    <i class="fa-solid ${fileIcon}"></i> ${escapeHtml(fileName)}
                                 </span>
-                                <i class="fa-solid fa-circle-xmark attachment-remove-btn" onclick="removeAttachment('${{t.deptKey}}', '${{t.id}}')" title="حذف المرفق"></i>
+                                <i class="fa-solid fa-circle-xmark attachment-remove-btn" onclick="removeAttachment('${t.deptKey}', '${t.id}')" title="حذف المرفق"></i>
                             </div>
                         </td>
                     `;
-                }} else {{
+                } else {
                     attachmentCell = `
                         <td style="text-align: center;">
-                            <button class="btn-attach-add" onclick="openAttachModal('${{t.deptKey}}', '${{t.id}}')" title="إرفاق ملف إنجاز للمهمة">
+                            <button class="btn-attach-add" onclick="openAttachModal('${t.deptKey}', '${t.id}')" title="إرفاق ملف إنجاز للمهمة">
                                 <i class="fa-solid fa-paperclip"></i> إرفاق ملف
                             </button>
                         </td>
                     `;
-                }}
+                }
 
                 return `
                     <tr>
                         <td style="text-align: center;">
-                            <button class="task-toggle-btn ${{isDone ? 'is-done' : ''}}" 
-                                    onclick="toggleTaskDone('${{t.deptKey}}', '${{t.id}}')"
-                                    title="${{isDone ? 'إلغاء تحديد الإنجاز' : 'تحديد كـ تم'}}">
+                            <button class="task-toggle-btn ${isDone ? 'is-done' : ''}" 
+                                    onclick="toggleTaskDone('${t.deptKey}', '${t.id}')"
+                                    title="${isDone ? 'إلغاء تحديد الإنجاز' : 'تحديد كـ تم'}">
                                 <i class="fa-solid fa-check"></i>
                             </button>
                         </td>
                         <td>
-                            <div class="task-title ${{isDone ? 'is-done-text' : ''}}">${{escapeHtml(t.title)}}</div>
+                            <div class="task-title ${isDone ? 'is-done-text' : ''}">${escapeHtml(t.title)}</div>
                         </td>
-                        ${{deptCell}}
+                        ${deptCell}
                         <td style="text-align: center;">
-                            <span class="badge ${{statusBadgeClass}} clickable-badge" 
-                                  onclick="cycleTaskStatus('${{t.deptKey}}', '${{t.id}}')"
+                            <span class="badge ${statusBadgeClass} clickable-badge" 
+                                  onclick="cycleTaskStatus('${t.deptKey}', '${t.id}')"
                                   title="انقر لتغيير الحالة سريعا">
-                                <i class="fa-solid ${{statusIcon}}"></i> ${{t.status}}
+                                <i class="fa-solid ${statusIcon}"></i> ${t.status}
                             </span>
                         </td>
                         <td style="text-align: center;">
-                            <span class="priority-badge ${{priorityClass}}">
-                                <i class="fa-solid ${{priorityIcon}}"></i> ${{t.priority || 'متوسط'}}
+                            <span class="priority-badge ${priorityClass}">
+                                <i class="fa-solid ${priorityIcon}"></i> ${t.priority || 'متوسط'}
                             </span>
                         </td>
                         <td style="text-align: center;">
-                            <span class="date-text">${{t.requestDate || '-'}}</span>
+                            <span class="date-text">${t.requestDate || '-'}</span>
                         </td>
                         <td style="text-align: center;">
-                            <span class="date-text" style="${{isDone && t.completionDate ? 'color: #15803d; font-weight: bold;' : ''}}">${{t.completionDate || '-'}}</span>
+                            <span class="date-text" style="${isDone && t.completionDate ? 'color: #15803d; font-weight: bold;' : ''}">${t.completionDate || '-'}</span>
                         </td>
-                        ${{attachmentCell}}
+                        ${attachmentCell}
                         <td style="text-align: center;">
                             <div class="action-btn-group" style="justify-content: center;">
-                                <button class="action-icon-btn" onclick="openEditTaskModal('${{t.deptKey}}', '${{t.id}}')" title="تعديل المهمة">
+                                <button class="action-icon-btn" onclick="openEditTaskModal('${t.deptKey}', '${t.id}')" title="تعديل المهمة">
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
-                                <button class="action-icon-btn delete-btn" onclick="deleteTask('${{t.deptKey}}', '${{t.id}}')" title="حذف المهمة">
+                                <button class="action-icon-btn delete-btn" onclick="deleteTask('${t.deptKey}', '${t.id}')" title="حذف المهمة">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
                 `;
-            }}).join('');
-        }}
+            }).join('');
+        }
 
-        function setStatusFilter(status) {{
+        function setStatusFilter(status) {
             currentStatusFilter = status;
-            document.querySelectorAll('.filter-btn').forEach(btn => {{
+            document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-status') === status);
-            }});
+            });
             filterAndRenderTasks();
-        }}
+        }
 
-        // =========================================
-        // TASK STATUS TOGGLE
-        // =========================================
-        function toggleTaskDone(deptKey, taskId) {{
+        function toggleTaskDone(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
-            if (task.status === 'تم') {{
+            if (task.status === 'تم') {
                 task.status = 'لم تنتهي';
                 showToast('تمت إعادة المهمة إلى حالة (لم تنتهي)', 'info');
-            }} else {{
+            } else {
                 task.status = 'تم';
-                if (!task.completionDate) {{
+                if (!task.completionDate) {
                     task.completionDate = new Date().toISOString().split('T')[0];
-                }}
+                }
                 showToast('🎉 تم تسجيل إنجاز المهمة وحفظها سحابياً!', 'success');
-            }}
+            }
 
             saveAllData();
-        }}
+        }
 
-        function cycleTaskStatus(deptKey, taskId) {{
+        function cycleTaskStatus(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
@@ -1942,18 +2002,15 @@
             const nextIndex = (order.indexOf(task.status) + 1) % order.length;
             task.status = order[nextIndex];
 
-            if (task.status === 'تم' && !task.completionDate) {{
+            if (task.status === 'تم' && !task.completionDate) {
                 task.completionDate = new Date().toISOString().split('T')[0];
-            }}
+            }
 
             saveAllData();
-            showToast(`تم تغيير الحالة إلى: ${{task.status}}`, 'info');
-        }}
+            showToast(`تم تغيير الحالة إلى: ${task.status}`, 'info');
+        }
 
-        // =========================================
-        // ATTACHMENT LOGIC (DEDICATED CLOUD ATTACHMENT SYNC)
-        // =========================================
-        function openAttachModal(deptKey, taskId) {{
+        function openAttachModal(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
@@ -1962,17 +2019,16 @@
             document.getElementById('attachDeptKey').value = deptKey;
             document.getElementById('attachTaskId').value = taskId;
             document.getElementById('attachTaskTitle').textContent = task.title;
-            document.getElementById('attachExternalUrlInput').value = task.attachment?.url || '';
             clearSelectedFile();
             document.getElementById('attachModal').classList.add('active');
-        }}
+        }
 
-        function closeAttachModal() {{
+        function closeAttachModal() {
             document.getElementById('attachModal').classList.remove('active');
             clearSelectedFile();
-        }}
+        }
 
-        function handleFileSelected(event) {{
+        function handleFileSelected(event) {
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1982,186 +2038,92 @@
             document.getElementById('selectedFileName').textContent = file.name;
             document.getElementById('selectedFileSize').textContent = formatBytes(file.size);
             document.getElementById('selectedFileInfo').style.display = 'flex';
-            document.getElementById('attachExternalUrlInput').value = '';
 
             const reader = new FileReader();
-            reader.onload = function(e) {{
-                loadedAttachmentData = {{
+            reader.onload = function(e) {
+                loadedAttachmentObject = {
                     name: file.name,
                     size: formatBytes(file.size),
                     type: file.type || 'application/octet-stream',
                     data: e.target.result,
                     date: new Date().toISOString().split('T')[0]
-                }};
+                };
                 btnSave.disabled = false;
-            }};
+            };
             reader.readAsDataURL(file);
-        }}
+        }
 
-        function handleUrlInputChanged() {{
-            const urlVal = document.getElementById('attachExternalUrlInput').value.trim();
-            const btnSave = document.getElementById('btnSaveAttachment');
-            if (urlVal) {{
-                btnSave.disabled = false;
-            }} else if (!loadedAttachmentData) {{
-                btnSave.disabled = true;
-            }}
-        }}
-
-        function clearSelectedFile() {{
-            loadedAttachmentData = null;
+        function clearSelectedFile() {
+            loadedAttachmentObject = null;
             document.getElementById('fileInputModal').value = '';
             document.getElementById('selectedFileInfo').style.display = 'none';
-            handleUrlInputChanged();
-        }}
+            document.getElementById('btnSaveAttachment').disabled = true;
+        }
 
-        async function saveAttachment() {{
+        function saveAttachment() {
+            if (!loadedAttachmentObject) return;
+
             const deptKey = document.getElementById('attachDeptKey').value;
             const taskId = document.getElementById('attachTaskId').value;
-            const extUrl = document.getElementById('attachExternalUrlInput').value.trim();
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
-            const btnSave = document.getElementById('btnSaveAttachment');
-            btnSave.disabled = true;
-            btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...';
+            task.attachment = loadedAttachmentObject;
 
-            try {{
-                if (extUrl) {{
-                    task.attachment = {{
-                        name: 'رابط ملف خارجي',
-                        size: 'رابط سحابي',
-                        type: 'url',
-                        url: extUrl,
-                        hasFile: true,
-                        date: new Date().toISOString().split('T')[0]
-                    }};
-                }} else if (loadedAttachmentData) {{
-                    const safeTaskId = String(taskId).replace(/[^a-zA-Z0-9_-]/g, '_');
-                    
-                    // 1. Save lightweight attachment metadata on the task
-                    task.attachment = {{
-                        name: loadedAttachmentData.name,
-                        size: loadedAttachmentData.size,
-                        type: loadedAttachmentData.type,
-                        hasFile: true,
-                        date: loadedAttachmentData.date
-                    }};
+            if (task.status !== 'تم') {
+                task.status = 'تم';
+                if (!task.completionDate) {
+                    task.completionDate = new Date().toISOString().split('T')[0];
+                }
+            }
 
-                    // 2. Save heavy file payload in dedicated cloud path watania_attachments/taskId
-                    if (isFirebaseActive && attachDbRef) {{
-                        await attachDbRef.child(safeTaskId).set({{
-                            name: loadedAttachmentData.name,
-                            type: loadedAttachmentData.type,
-                            data: loadedAttachmentData.data,
-                            date: loadedAttachmentData.date
-                        }});
-                    }}
-                }}
+            saveAllData();
+            closeAttachModal();
+            showToast('📎 تم إرفاق الملف وحفظه سحابياً بنجاح!', 'success');
+        }
 
-                if (task.status !== 'تم') {{
-                    task.status = 'تم';
-                    if (!task.completionDate) {{
-                        task.completionDate = new Date().toISOString().split('T')[0];
-                    }}
-                }}
-
-                await saveAllData();
-                closeAttachModal();
-                showToast('📎 تم حفظ وإرفاق الملف بنجاح على السحابة!', 'success');
-            }} catch (err) {{
-                console.error("Attachment save error:", err);
-                alert("حدث خطأ أثناء حفظ الملف، يرجى المحاولة مرة أخرى.");
-            }} finally {{
-                btnSave.disabled = false;
-                btnSave.innerHTML = '<i class="fa-solid fa-check"></i> حفظ وإرفاق الملف فوراً';
-            }}
-        }}
-
-        async function removeAttachment(deptKey, taskId) {{
+        function removeAttachment(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task || !task.attachment) return;
 
-            if (confirm(`هل أنت متأكد من حذف المرفق:\\n"${{task.attachment.name || 'الملف'}}"`)) {{
+            if (confirm(`هل أنت متأكد من حذف المرفق:\n"${task.attachment.name}"`)) {
                 delete task.attachment;
-                const safeTaskId = String(taskId).replace(/[^a-zA-Z0-9_-]/g, '_');
-                if (isFirebaseActive && attachDbRef) {{
-                    try {{
-                        await attachDbRef.child(safeTaskId).remove();
-                    }} catch (e) {{
-                        console.log("Remove attachment payload error:", e);
-                    }}
-                }}
                 saveAllData();
                 showToast('تم حذف المرفق', 'info');
-            }}
-        }}
+            }
+        }
 
-        async function downloadAttachment(deptKey, taskId) {{
+        function downloadAttachment(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task || !task.attachment) return;
 
-            const attachMeta = task.attachment;
-
-            if (attachMeta.url) {{
-                window.open(attachMeta.url, '_blank');
-                return;
-            }}
-
-            showToast(`جاري جلب وتحميل: ${{attachMeta.name || 'الملف'}}...`, 'info');
-
-            // Fetch from dedicated cloud attachments path
-            if (isFirebaseActive && attachDbRef) {{
-                try {{
-                    const safeTaskId = String(taskId).replace(/[^a-zA-Z0-9_-]/g, '_');
-                    const snapshot = await attachDbRef.child(safeTaskId).once('value');
-                    const fileObj = snapshot.val();
-                    if (fileObj && fileObj.data) {{
-                        const link = document.createElement('a');
-                        link.href = fileObj.data;
-                        link.download = fileObj.name || attachMeta.name || 'attachment';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        return;
-                    }}
-                }} catch (e) {{
-                    console.error("Error fetching attachment from cloud:", e);
-                }}
-            }}
-
-            // Fallback if data is already inside metadata
-            if (attachMeta.data) {{
+            if (task.attachment.data) {
                 const link = document.createElement('a');
-                link.href = attachMeta.data;
-                link.download = attachMeta.name || 'attachment';
+                link.href = task.attachment.data;
+                link.download = task.attachment.name || 'attachment';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-            }} else {{
-                alert('تعذر تحميل الملف من السحابة، يرجى إعادة إرفاقه.');
-            }}
-        }}
+                showToast(`جاري تنزيل: ${task.attachment.name}`, 'info');
+            }
+        }
 
-        function formatBytes(bytes, decimals = 1) {{
+        function formatBytes(bytes, decimals = 1) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const dm = decimals < 0 ? 0 : decimals;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        }}
+        }
 
-        // =========================================
-        // TASK CRUD OPERATIONS
-        // =========================================
-        function openAddTaskModal() {{
+        function openAddTaskModal() {
             document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> إضافة مهمة جديدة';
             document.getElementById('taskIdInput').value = '';
             document.getElementById('taskDeptSelect').value = (currentDept === 'all') ? 'industrial' : currentDept;
@@ -2172,9 +2134,9 @@
             document.getElementById('taskRequestDateInput').value = new Date().toISOString().split('T')[0];
             document.getElementById('taskCompletionDateInput').value = '';
             document.getElementById('taskModal').classList.add('active');
-        }}
+        }
 
-        function openEditTaskModal(deptKey, taskId) {{
+        function openEditTaskModal(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
@@ -2191,13 +2153,13 @@
             document.getElementById('taskRequestDateInput').value = task.requestDate || '';
             document.getElementById('taskCompletionDateInput').value = task.completionDate || '';
             document.getElementById('taskModal').classList.add('active');
-        }}
+        }
 
-        function closeTaskModal() {{
+        function closeTaskModal() {
             document.getElementById('taskModal').classList.remove('active');
-        }}
+        }
 
-        function saveTask() {{
+        function saveTask() {
             const idVal = document.getElementById('taskIdInput').value;
             const deptKey = document.getElementById('taskDeptSelect').value;
             const title = document.getElementById('taskTitleInput').value.trim();
@@ -2206,112 +2168,112 @@
             const requestDate = document.getElementById('taskRequestDateInput').value;
             const completionDate = document.getElementById('taskCompletionDateInput').value;
 
-            if (!title) {{
+            if (!title) {
                 alert('يرجى كتابة بيان المهمة أولاً.');
                 return;
-            }}
+            }
 
-            if (!allTasksData[deptKey]) {{
-                allTasksData[deptKey] = {{ id: deptKey, tasks: [] }};
-            }}
+            if (!allTasksData[deptKey]) {
+                allTasksData[deptKey] = { id: deptKey, tasks: [] };
+            }
 
             const deptList = allTasksData[deptKey].tasks;
 
-            if (idVal) {{
+            if (idVal) {
                 const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(idVal)) : null;
-                if (task) {{
+                if (task) {
                     task.title = title;
                     task.status = status;
                     task.priority = priority;
                     task.requestDate = requestDate;
                     task.completionDate = completionDate;
                     showToast('تم تعديل المهمة وحفظها بنجاح', 'success');
-                }}
-            }} else {{
-                const newId = `${{deptKey}}_${{Date.now()}}`;
+                }
+            } else {
+                const newId = `${deptKey}_${Date.now()}`;
                 const newNum = deptList.length + 1;
-                deptList.unshift({{
+                deptList.unshift({
                     id: newId,
-                    title: `${{newNum}}. ${{title}}`,
+                    title: `${newNum}. ${title}`,
                     status: status,
                     priority: priority,
                     requestDate: requestDate || new Date().toISOString().split('T')[0],
                     completionDate: completionDate
-                }});
+                });
                 showToast('تمت إضافة المهمة وحفظها بنجاح', 'success');
-            }}
+            }
 
             saveAllData();
             closeTaskModal();
-        }}
+        }
 
-        function deleteTask(deptKey, taskId) {{
+        function deleteTask(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
-            if (confirm(`هل أنت متأكد من حذف المهمة:\n"${{task.title}}"`)) {{
+            if (confirm(`هل أنت متأكد من حذف المهمة:\n"${task.title}"`)) {
                 allTasksData[deptKey].tasks = deptList.filter(t => String(t.id) !== String(taskId));
                 saveAllData();
                 showToast('تم حذف المهمة بنجاح', 'info');
-            }}
-        }}
+            }
+        }
 
-        function resetToInitialData() {{
-            if (confirm('هل تريد استعادة القوائم الأصلية لجميع الإدارات وإعادة تعيين أي تغييرات؟')) {{
+        function resetToInitialData() {
+            if (confirm('هل تريد استعادة القوائم الأصلية لجميع الإدارات وإعادة تعيين أي تغييرات؟')) {
                 allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
                 saveAllData();
                 showToast('تمت استعادة البيانات الأصلية بنجاح', 'info');
-            }}
-        }}
+            }
+        }
 
-        function exportToCSV() {{
+        function exportToCSV() {
             const currentList = getActiveDepartmentTasks();
-            let csvContent = "\\uFEFF";
-            csvContent += "م,البيان,الإدارة,حالة الإنجاز,الأولوية,تاريخ الطلب,تاريخ إنتهائه,المرفق\\n";
+            let csvContent = "\uFEFF";
+            csvContent += "م,البيان,الإدارة,حالة الإنجاز,الأولوية,تاريخ الطلب,تاريخ إنتهائه,المرفق\n";
 
-            currentList.forEach((t, index) => {{
-                const cleanTitle = `"${{(t.title || '').replace(/"/g, '""')}}"`;
-                const cleanDept = `"${{t.deptName || ''}}"`;
-                const cleanAttach = `"${{(t.attachment && t.attachment.name ? t.attachment.name : '').replace(/"/g, '""')}}"`;
-                csvContent += `${{index + 1}},${{cleanTitle}},${{cleanDept}},"${{t.status}}","${{t.priority || ''}}","${{t.requestDate || ''}}","${{t.completionDate || ''}}",${{cleanAttach}}\\n`;
-            }});
+            currentList.forEach((t, index) => {
+                const cleanTitle = `"${(t.title || '').replace(/"/g, '""')}"`;
+                const cleanDept = `"${t.deptName || ''}"`;
+                const cleanAttach = `"${(t.attachment && t.attachment.name ? t.attachment.name : '').replace(/"/g, '""')}"`;
+                csvContent += `${index + 1},${cleanTitle},${cleanDept},"${t.status}","${t.priority || ''}","${t.requestDate || ''}","${t.completionDate || ''}",${cleanAttach}\n`;
+            });
 
-            const blob = new Blob([csvContent], {{ type: 'text/csv;charset=utf-8;' }});
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.setAttribute("href", url);
-            link.setAttribute("download", `متابعة_مهام_${{currentDept}}_${{new Date().toISOString().split('T')[0]}}.csv`);
+            link.setAttribute("download", `متابعة_مهام_${currentDept}_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }}
+        }
 
-        function exportBackupJSON() {{
+        function exportBackupJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allTasksData, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `نسخة_احتياطية_مهام_الادارات_${{new Date().toISOString().split('T')[0]}}.json`);
+            downloadAnchor.setAttribute("download", `نسخة_احتياطية_مهام_الادارات_${new Date().toISOString().split('T')[0]}.json`);
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
             showToast('تم تنزيل ملف النسخة الاحتياطية السحابية بنجاح!', 'success');
-        }}
+        }
 
-        function showToast(message, type = 'success') {{
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const msgEl = document.getElementById('toastMessage');
             msgEl.textContent = message;
             
-            toast.className = `toast ${{type}} show`;
-            setTimeout(() => {{
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
                 toast.classList.remove('show');
-            }}, 3000);
-        }}
+            }, 3000);
+        }
 
-        function escapeHtml(str) {{
+        function escapeHtml(str) {
             if (!str) return '';
             return str
                 .replace(/&/g, "&amp;")
@@ -2319,19 +2281,19 @@
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
-        }}
+        }
 
-        window.onclick = function(event) {{
+        window.onclick = function(event) {
             const taskModal = document.getElementById('taskModal');
             const attachModal = document.getElementById('attachModal');
             if (event.target === taskModal) closeTaskModal();
             if (event.target === attachModal) closeAttachModal();
-        }};
+        };
 
-        document.addEventListener('DOMContentLoaded', () => {{
+        document.addEventListener('DOMContentLoaded', () => {
             checkEntryStatus();
             loadAllData();
-        }});
+        });
     </script>
 </body>
 </html>
