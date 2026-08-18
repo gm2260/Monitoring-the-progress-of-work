@@ -11,9 +11,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDKs for Live Cloud Realtime Sync -->
+    <!-- Firebase SDKs for Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <style>
         :root {
@@ -335,26 +335,6 @@
             background: #fee2e2;
             color: #dc2626;
             border-color: #fca5a5;
-        }
-
-        /* Alert Banner */
-        #cloudAlertBanner {
-            display: none;
-            background: #fffbeb;
-            border-bottom: 2px solid #fde68a;
-            padding: 0.75rem 1.5rem;
-            color: #92400e;
-            font-size: 0.88rem;
-            font-weight: 700;
-        }
-
-        #cloudAlertBanner .banner-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
         }
 
         /* Navigation Tabs */
@@ -1194,17 +1174,6 @@
         </div>
     </div>
 
-    <!-- Cloud Alert Banner (Shows instructions if rules block sync) -->
-    <div id="cloudAlertBanner">
-        <div class="banner-content">
-            <div>
-                <i class="fa-solid fa-triangle-exclamation" style="margin-left: 0.5rem; color: #d97706;"></i>
-                <strong>تنبيه مزامنة السحابة:</strong> قاعدة بيانات Firebase تحتاج إلى تفعيل صلاحيات القراءة والكتابة (Test Mode) لتظهر التعديلات على الكمبيوتر الآخر تلقائياً.
-            </div>
-            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="showFirestoreHelp()">كيف أفعّلها؟</button>
-        </div>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -1513,7 +1482,7 @@
     <!-- Javascript Logic -->
     <script>
         // ==========================================
-        // 1. مفاتيح مشروع Firebase الخاص بك (مدرجة وجاهزة)
+        // 1. مفاتيح Realtime Database الخاصة بك
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCdOHkYiVGhGDOoo8aClp_5e1u5NHX65U",
@@ -1526,8 +1495,8 @@
             measurementId: "G-XQLRML6WFZ"
         };
 
-        const STORAGE_KEY = "watania_multi_dept_tasks_v8";
-        const ENTRY_KEY = "watania_portal_entered_v8";
+        const STORAGE_KEY = "watania_multi_dept_tasks_v9";
+        const ENTRY_KEY = "watania_portal_entered_v9";
 
         // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
@@ -1613,7 +1582,7 @@
   }
 };
 
-        let db = null;
+        let dbRef = null;
         let isFirebaseActive = false;
         let currentDept = 'industrial';
         let currentStatusFilter = 'all';
@@ -1671,21 +1640,21 @@
 
         function loadAllData() {
             const cloudTag = document.getElementById('cloudStatusTag');
-            const alertBanner = document.getElementById('cloudAlertBanner');
 
-            if (firebaseConfig.apiKey) {
+            if (firebaseConfig.databaseURL) {
                 try {
                     if (!firebase.apps.length) {
                         firebase.initializeApp(firebaseConfig);
                     }
-                    db = firebase.firestore();
+                    const database = firebase.database();
+                    dbRef = database.ref('watania_tasks_data');
                     isFirebaseActive = true;
                     
-                    listenToCloudFirestore();
+                    listenToRealtimeDatabase();
                     return;
                 } catch (err) {
                     console.error("Firebase init error:", err);
-                    setCloudStatusError("خطأ في التهيئة");
+                    setCloudStatusError("خطأ في الاتصال");
                 }
             }
             loadFromLocalStorage();
@@ -1709,36 +1678,29 @@
             filterAndRenderTasks();
         }
 
-        function listenToCloudFirestore() {
+        function listenToRealtimeDatabase() {
             const cloudTag = document.getElementById('cloudStatusTag');
-            const alertBanner = document.getElementById('cloudAlertBanner');
 
-            db.collection("departments_data").doc("main_data").onSnapshot(async (doc) => {
+            dbRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                
                 cloudTag.className = "cloud-badge connected";
-                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن فوري بين الأجهزة)';
-                alertBanner.style.display = "none";
+                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن لحظي بين الأجهزة)';
 
-                if (doc.exists && doc.data() && doc.data().data) {
-                    allTasksData = doc.data().data;
+                if (val) {
+                    allTasksData = val;
                 } else {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                    try {
-                        await db.collection("departments_data").doc("main_data").set({
-                            data: allTasksData,
-                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    } catch (e) {
-                        console.error("Initial write error:", e);
-                    }
+                    dbRef.set(allTasksData);
                 }
+
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
                 updateTabBadges();
                 updateKPIs();
                 filterAndRenderTasks();
             }, (err) => {
-                console.error("Firestore Permission/Rules Error:", err);
+                console.error("Firebase Realtime DB Rules error:", err);
                 setCloudStatusError("قواعد الأمان تحتاج تفعيل");
-                alertBanner.style.display = "block";
                 loadFromLocalStorage();
             });
         }
@@ -1747,31 +1709,16 @@
             const cloudTag = document.getElementById('cloudStatusTag');
             cloudTag.className = "cloud-badge error";
             cloudTag.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> غير متصل بالسحابة (${msg})`;
-            cloudTag.onclick = showFirestoreHelp;
-        }
-
-        function showFirestoreHelp() {
-            alert(`⚠️ خطوات تفعيل التزامن بين الأجهزة في Firebase:
-1. ادخل على لوحة Firebase Console لمشروعك.
-2. ادخل على Firestore Database -> اختر تبويب Rules (القواعد).
-3. غيّر الكود إلى:
-allow read, write: if true;
-4. اضغط Publish (نشر).
-ثم أعد تحديث الصفحة وستعمل المزامنة بين كل الأجهزة فوراً.`);
         }
 
         async function saveAllData() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
             
-            if (isFirebaseActive && db) {
+            if (isFirebaseActive && dbRef) {
                 try {
-                    await db.collection("departments_data").doc("main_data").set({
-                        data: allTasksData,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    await dbRef.set(allTasksData);
                 } catch (e) {
-                    console.error("Error saving to cloud:", e);
-                    document.getElementById('cloudAlertBanner').style.display = 'block';
+                    console.error("Error saving to Realtime Database:", e);
                 }
             }
 
