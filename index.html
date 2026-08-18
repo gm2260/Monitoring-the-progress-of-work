@@ -11,7 +11,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDKs for Live Cloud Sync -->
+    <!-- Firebase SDKs for Live Cloud Realtime Sync -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -245,13 +245,30 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.15rem 0.65rem;
+            padding: 0.2rem 0.75rem;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.76rem;
             font-weight: 800;
+            transition: var(--transition);
+        }
+
+        .cloud-badge.connected {
             background: #dcfce7;
             color: #15803d;
             border: 1px solid #86efac;
+        }
+
+        .cloud-badge.syncing {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #93c5fd;
+        }
+
+        .cloud-badge.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+            cursor: pointer;
         }
 
         .header-actions {
@@ -320,7 +337,27 @@
             border-color: #fca5a5;
         }
 
-        /* Department Navigation Tabs */
+        /* Alert Banner */
+        #cloudAlertBanner {
+            display: none;
+            background: #fffbeb;
+            border-bottom: 2px solid #fde68a;
+            padding: 0.75rem 1.5rem;
+            color: #92400e;
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        #cloudAlertBanner .banner-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        /* Navigation Tabs */
         .dept-tabs-bar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -680,7 +717,6 @@
             background-color: #f8fafc;
         }
 
-        /* Toggle Checkbox Button */
         .task-toggle-btn {
             width: 36px;
             height: 36px;
@@ -801,7 +837,6 @@
             font-weight: 600;
         }
 
-        /* Attachments Styles */
         .attachment-container {
             display: flex;
             align-items: center;
@@ -912,7 +947,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Modal Styles */
+        /* Modals */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -1159,6 +1194,17 @@
         </div>
     </div>
 
+    <!-- Cloud Alert Banner (Shows instructions if rules block sync) -->
+    <div id="cloudAlertBanner">
+        <div class="banner-content">
+            <div>
+                <i class="fa-solid fa-triangle-exclamation" style="margin-left: 0.5rem; color: #d97706;"></i>
+                <strong>تنبيه مزامنة السحابة:</strong> قاعدة بيانات Firebase تحتاج إلى تفعيل صلاحيات القراءة والكتابة (Test Mode) لتظهر التعديلات على الكمبيوتر الآخر تلقائياً.
+            </div>
+            <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="showFirestoreHelp()">كيف أفعّلها؟</button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -1168,8 +1214,8 @@
                     <h1><i class="fa-solid fa-layer-group"></i> نظام متابعة مهام الإدارات</h1>
                     <p>
                         إدارة التكاليف ومراقبة المخزون — دواجن الوطنية
-                        <span id="cloudStatusTag" class="cloud-badge">
-                            <i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (Live Cloud)
+                        <span id="cloudStatusTag" class="cloud-badge syncing">
+                            <i class="fa-solid fa-spinner fa-spin"></i> جاري الاتصال بالسحابة...
                         </span>
                     </p>
                 </div>
@@ -1480,8 +1526,8 @@
             measurementId: "G-XQLRML6WFZ"
         };
 
-        const STORAGE_KEY = "watania_multi_dept_tasks_v7";
-        const ENTRY_KEY = "watania_portal_entered_v7";
+        const STORAGE_KEY = "watania_multi_dept_tasks_v8";
+        const ENTRY_KEY = "watania_portal_entered_v8";
 
         // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
@@ -1624,16 +1670,22 @@
         }
 
         function loadAllData() {
+            const cloudTag = document.getElementById('cloudStatusTag');
+            const alertBanner = document.getElementById('cloudAlertBanner');
+
             if (firebaseConfig.apiKey) {
                 try {
-                    firebase.initializeApp(firebaseConfig);
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
                     db = firebase.firestore();
                     isFirebaseActive = true;
-                    document.getElementById('cloudStatusTag').innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (Live Cloud)';
+                    
                     listenToCloudFirestore();
                     return;
                 } catch (err) {
                     console.error("Firebase init error:", err);
+                    setCloudStatusError("خطأ في التهيئة");
                 }
             }
             loadFromLocalStorage();
@@ -1658,24 +1710,54 @@
         }
 
         function listenToCloudFirestore() {
+            const cloudTag = document.getElementById('cloudStatusTag');
+            const alertBanner = document.getElementById('cloudAlertBanner');
+
             db.collection("departments_data").doc("main_data").onSnapshot(async (doc) => {
-                if (doc.exists && doc.data().data) {
+                cloudTag.className = "cloud-badge connected";
+                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن فوري بين الأجهزة)';
+                alertBanner.style.display = "none";
+
+                if (doc.exists && doc.data() && doc.data().data) {
                     allTasksData = doc.data().data;
                 } else {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                    await db.collection("departments_data").doc("main_data").set({
-                        data: allTasksData,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    try {
+                        await db.collection("departments_data").doc("main_data").set({
+                            data: allTasksData,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    } catch (e) {
+                        console.error("Initial write error:", e);
+                    }
                 }
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
                 updateTabBadges();
                 updateKPIs();
                 filterAndRenderTasks();
             }, (err) => {
-                console.error("Firestore error:", err);
+                console.error("Firestore Permission/Rules Error:", err);
+                setCloudStatusError("قواعد الأمان تحتاج تفعيل");
+                alertBanner.style.display = "block";
                 loadFromLocalStorage();
             });
+        }
+
+        function setCloudStatusError(msg) {
+            const cloudTag = document.getElementById('cloudStatusTag');
+            cloudTag.className = "cloud-badge error";
+            cloudTag.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> غير متصل بالسحابة (${msg})`;
+            cloudTag.onclick = showFirestoreHelp;
+        }
+
+        function showFirestoreHelp() {
+            alert(`⚠️ خطوات تفعيل التزامن بين الأجهزة في Firebase:
+1. ادخل على لوحة Firebase Console لمشروعك.
+2. ادخل على Firestore Database -> اختر تبويب Rules (القواعد).
+3. غيّر الكود إلى:
+allow read, write: if true;
+4. اضغط Publish (نشر).
+ثم أعد تحديث الصفحة وستعمل المزامنة بين كل الأجهزة فوراً.`);
         }
 
         async function saveAllData() {
@@ -1689,6 +1771,7 @@
                     });
                 } catch (e) {
                     console.error("Error saving to cloud:", e);
+                    document.getElementById('cloudAlertBanner').style.display = 'block';
                 }
             }
 
@@ -1978,8 +2061,8 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            if (file.size > 5 * 1024 * 1024) {
-                alert('حجم الملف كبير جداً (أكثر من 5 ميجابايت)، يرجى اختيار ملف أصغر حجماً لتوفير مساحة التخزين.');
+            if (file.size > 800 * 1024) {
+                alert('حجم الملف المرفق أكبر من 800 كيلوبايت. لتسريع المزامنة السحابية الفورية يرجى استخدام ملفات أو تقارير أصغر حجماً.');
                 return;
             }
 
@@ -2237,8 +2320,8 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadAllData();
             checkEntryStatus();
+            loadAllData();
         });
     </script>
 </body>
