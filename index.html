@@ -11,10 +11,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDKs for Realtime Database & Cloud Storage -->
+    <!-- Firebase SDKs for Realtime Database (Lightweight & Super Fast) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
     <style>
         :root {
@@ -269,7 +268,6 @@
             background: #fee2e2;
             color: #b91c1c;
             border: 1px solid #fca5a5;
-            cursor: pointer;
         }
 
         .header-actions {
@@ -952,7 +950,7 @@
             background: #ffffff;
             border-radius: var(--radius-lg);
             width: 100%;
-            max-width: 580px;
+            max-width: 520px;
             box-shadow: var(--shadow-lg);
             overflow: hidden;
             animation: modalSlideIn 0.3s ease;
@@ -1370,9 +1368,9 @@
         </section>
     </main>
 
-    <!-- Attach Modal (Supports up to 25 MB) -->
+    <!-- Attach Modal (Ultra Fast Local-to-Cloud Sync) -->
     <div class="modal-backdrop" id="attachModal">
-        <div class="modal" style="max-width: 520px;">
+        <div class="modal">
             <div class="modal-header">
                 <h3><i class="fa-solid fa-paperclip" style="color: var(--primary);"></i> إرفاق ملف إنجاز المهمة</h3>
                 <button class="modal-close" onclick="closeAttachModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -1386,7 +1384,7 @@
                 <div class="drop-zone" onclick="document.getElementById('fileInputModal').click()">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                     <p>انقر لاختيار ملف من جهازك أو اسحبه هنا</p>
-                    <span style="display: block; margin-top: 0.25rem; font-weight: 700; color: var(--primary);">يدعم حتى 25 ميجابايت (Excel, PDF, Word, صور وتقارير)</span>
+                    <span style="display: block; margin-top: 0.25rem; font-weight: 700; color: var(--primary);">رفع فوري وسريع (Excel, PDF, Word, صور وتقارير)</span>
                 </div>
 
                 <div id="selectedFileInfo" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius-sm); padding: 0.75rem 1rem; align-items: center; justify-content: space-between;">
@@ -1401,21 +1399,11 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-
-                <div id="uploadProgressContainer" style="display: none; margin-top: 0.5rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.2rem;">
-                        <span>جاري رفع وحفظ الملف...</span>
-                        <span id="uploadProgressText">0%</span>
-                    </div>
-                    <div style="height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
-                        <div id="uploadProgressBar" style="height: 100%; width: 0%; background: var(--primary-gradient);"></div>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeAttachModal()">إلغاء</button>
                 <button class="btn btn-primary" id="btnSaveAttachment" onclick="saveAttachment()" disabled>
-                    <i class="fa-solid fa-upload"></i> حفظ وإرفاق الملف
+                    <i class="fa-solid fa-check"></i> حفظ وإرفاق الملف فوراً
                 </button>
             </div>
         </div>
@@ -1493,7 +1481,7 @@
     <!-- Javascript Logic -->
     <script>
         // ==========================================
-        // 1. مفاتيح Realtime Database الخاصة بك
+        // 1. إعدادات Firebase Realtime Database
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCdOHkYiVGhGDOoo8aClp_5e1u5NHX65U",
@@ -1506,8 +1494,8 @@
             measurementId: "G-XQLRML6WFZ"
         };
 
-        const STORAGE_KEY = "watania_multi_dept_tasks_v10";
-        const ENTRY_KEY = "watania_portal_entered_v10";
+        const STORAGE_KEY = "watania_multi_dept_tasks_v11";
+        const ENTRY_KEY = "watania_portal_entered_v11";
 
         // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
@@ -1593,17 +1581,12 @@
   }
 };
 
-        // Attachment Limit in Megabytes (Changed to 25 MB)
-        const MAX_FILE_SIZE_MB = 25;
-
         let dbRef = null;
-        let storageRef = null;
         let isFirebaseActive = false;
         let currentDept = 'industrial';
         let currentStatusFilter = 'all';
         let allTasksData = {};
-        let rawSelectedFile = null;
-        let tempUploadedFile = null;
+        let loadedAttachmentObject = null;
 
         const DEPT_META = {
             "industrial": {
@@ -1664,11 +1647,6 @@
                     }
                     const database = firebase.database();
                     dbRef = database.ref('watania_tasks_data');
-                    try {
-                        storageRef = firebase.storage().ref();
-                    } catch (e) {
-                        console.log("Firebase storage not initialized:", e);
-                    }
                     isFirebaseActive = true;
                     
                     listenToRealtimeDatabase();
@@ -1720,7 +1698,7 @@
                 updateKPIs();
                 filterAndRenderTasks();
             }, (err) => {
-                console.error("Firebase Realtime DB Rules error:", err);
+                console.error("Firebase Realtime DB error:", err);
                 setCloudStatusError("قواعد الأمان تحتاج تفعيل");
                 loadFromLocalStorage();
             });
@@ -2029,30 +2007,36 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                alert(`حجم الملف كبير جداً (${formatBytes(file.size)}). الحد الأقصى للمرفق هو ${MAX_FILE_SIZE_MB} ميجابايت.`);
-                return;
-            }
-
-            rawSelectedFile = file;
+            const btnSave = document.getElementById('btnSaveAttachment');
+            btnSave.disabled = true;
 
             document.getElementById('selectedFileName').textContent = file.name;
             document.getElementById('selectedFileSize').textContent = formatBytes(file.size);
             document.getElementById('selectedFileInfo').style.display = 'flex';
-            document.getElementById('btnSaveAttachment').disabled = false;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                loadedAttachmentObject = {
+                    name: file.name,
+                    size: formatBytes(file.size),
+                    type: file.type,
+                    data: e.target.result,
+                    date: new Date().toISOString().split('T')[0]
+                };
+                btnSave.disabled = false;
+            };
+            reader.readAsDataURL(file);
         }
 
         function clearSelectedFile() {
-            rawSelectedFile = null;
-            tempUploadedFile = null;
+            loadedAttachmentObject = null;
             document.getElementById('fileInputModal').value = '';
             document.getElementById('selectedFileInfo').style.display = 'none';
-            document.getElementById('uploadProgressContainer').style.display = 'none';
             document.getElementById('btnSaveAttachment').disabled = true;
         }
 
-        async function saveAttachment() {
-            if (!rawSelectedFile) return;
+        function saveAttachment() {
+            if (!loadedAttachmentObject) return;
 
             const deptKey = document.getElementById('attachDeptKey').value;
             const taskId = document.getElementById('attachTaskId').value;
@@ -2061,76 +2045,8 @@
             const task = deptList.find(t => String(t.id) === String(taskId));
             if (!task) return;
 
-            const btnSave = document.getElementById('btnSaveAttachment');
-            btnSave.disabled = true;
+            task.attachment = loadedAttachmentObject;
 
-            const progressContainer = document.getElementById('uploadProgressContainer');
-            const progressBar = document.getElementById('uploadProgressBar');
-            const progressText = document.getElementById('uploadProgressText');
-            progressContainer.style.display = 'block';
-
-            if (isFirebaseActive && storageRef) {
-                try {
-                    const safeName = `${Date.now()}_${rawSelectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-                    const fileUploadRef = storageRef.child(`attachments/${deptKey}/${safeName}`);
-                    
-                    const uploadTask = fileUploadRef.put(rawSelectedFile);
-
-                    uploadTask.on('state_changed', 
-                        (snapshot) => {
-                            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                            progressBar.style.width = `${progress}%`;
-                            progressText.textContent = `${progress}%`;
-                        }, 
-                        (error) => {
-                            console.warn("Storage upload error, falling back to Base64:", error);
-                            saveAsBase64Fallback(task, rawSelectedFile);
-                        }, 
-                        async () => {
-                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                            task.attachment = {
-                                name: rawSelectedFile.name,
-                                size: formatBytes(rawSelectedFile.size),
-                                type: rawSelectedFile.type,
-                                url: downloadURL,
-                                date: new Date().toISOString().split('T')[0]
-                            };
-
-                            finalizeAttachmentSave(task);
-                        }
-                    );
-                    return;
-                } catch (e) {
-                    console.warn("Storage fallback to Base64:", e);
-                }
-            }
-
-            saveAsBase64Fallback(task, rawSelectedFile);
-        }
-
-        function saveAsBase64Fallback(task, file) {
-            const reader = new FileReader();
-            reader.onprogress = (e) => {
-                if (e.lengthComputable) {
-                    const progress = Math.round((e.loaded / e.total) * 100);
-                    document.getElementById('uploadProgressBar').style.width = `${progress}%`;
-                    document.getElementById('uploadProgressText').textContent = `${progress}%`;
-                }
-            };
-            reader.onload = function(e) {
-                task.attachment = {
-                    name: file.name,
-                    size: formatBytes(file.size),
-                    type: file.type,
-                    data: e.target.result,
-                    date: new Date().toISOString().split('T')[0]
-                };
-                finalizeAttachmentSave(task);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function finalizeAttachmentSave(task) {
             if (task.status !== 'تم') {
                 task.status = 'تم';
                 if (!task.completionDate) {
@@ -2162,17 +2078,15 @@
             const task = deptList.find(t => String(t.id) === String(taskId));
             if (!task || !task.attachment) return;
 
-            if (task.attachment.url) {
-                window.open(task.attachment.url, '_blank');
-            } else if (task.attachment.data) {
+            if (task.attachment.data) {
                 const link = document.createElement('a');
                 link.href = task.attachment.data;
                 link.download = task.attachment.name;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                showToast(`جاري تنزيل: ${task.attachment.name}`, 'info');
             }
-            showToast(`جاري فتح وتحميل: ${task.attachment.name}`, 'info');
         }
 
         function formatBytes(bytes, decimals = 1) {
