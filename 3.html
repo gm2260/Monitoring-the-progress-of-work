@@ -70,7 +70,7 @@
             flex-direction: column;
         }
 
-        /* Top Portal Navigation Bar */
+        /* Header Navigation */
         .portal-nav-bar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -857,7 +857,7 @@
     <nav class="portal-nav-bar">
         <a href="index.html" class="portal-back-link">
             <i class="fa-solid fa-house"></i>
-            <span>العودة إلى الشاشة الرئيسية</span>
+            <span>العودة إلى البوابة الرئيسية</span>
         </a>
         <div class="nav-links-group">
             <a href="1.html" class="nav-link-item">
@@ -893,9 +893,6 @@
             </div>
 
             <div class="header-actions">
-                <a href="index.html" class="btn btn-secondary" style="color: #ffffff; border-color: rgba(255,255,255,0.4); text-decoration: none;" title="العودة إلى الشاشة الرئيسية">
-                    <i class="fa-solid fa-house"></i> الشاشة الرئيسية
-                </a>
                 <button class="btn btn-primary" onclick="openAddModal()">
                     <i class="fa-solid fa-plus-circle"></i> إضافة لوحة / مهمة جديدة
                 </button>
@@ -1207,6 +1204,8 @@
         }
 
         function loadData() {
+            const cloudTag = document.getElementById('cloudStatusTag');
+
             if (firebaseConfig.databaseURL) {
                 try {
                     if (!firebase.apps.length) {
