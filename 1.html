@@ -70,6 +70,55 @@
             line-height: 1.6;
         }
 
+        /* Top Navigation Bar */
+        .portal-nav-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+        }
+
+        .portal-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .portal-back-link:hover {
+            color: #157347;
+            transform: translateX(4px);
+        }
+
+        .nav-links-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link-item {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-link-item:hover, .nav-link-item.active {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
         /* Welcome Screen */
         #welcomeGateScreen {
             position: fixed;
@@ -290,6 +339,7 @@
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
+            text-decoration: none;
         }
 
         .btn-primary {
@@ -313,6 +363,18 @@
         .btn-secondary:hover {
             background: #f8fafc;
             border-color: #cbd5e1;
+        }
+
+        .btn-home {
+            background: #f0fdf4;
+            color: var(--primary);
+            border-color: var(--primary-light);
+            font-weight: 800;
+        }
+
+        .btn-home:hover {
+            background: var(--primary);
+            color: #ffffff;
         }
 
         .btn-logout {
@@ -1073,6 +1135,25 @@
         </div>
     </div>
 
+    <!-- Top Navigation Bar -->
+    <nav class="portal-nav-bar">
+        <a href="index.html" class="portal-back-link">
+            <i class="fa-solid fa-house"></i>
+            <span>العودة إلى الشاشة الرئيسية</span>
+        </a>
+        <div class="nav-links-group">
+            <a href="1.html" class="nav-link-item active">
+                <i class="fa-solid fa-list-check"></i> متابعة المهام
+            </a>
+            <a href="2.html" class="nav-link-item">
+                <i class="fa-solid fa-calculator"></i> مراكز التكلفة
+            </a>
+            <a href="3.html" class="nav-link-item">
+                <i class="fa-solid fa-chart-pie"></i> لوحات إنكورتا
+            </a>
+        </div>
+    </nav>
+
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -1089,6 +1170,9 @@
                 </div>
             </div>
             <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary btn-home" title="العودة إلى الشاشة الرئيسية">
+                    <i class="fa-solid fa-house"></i> الشاشة الرئيسية
+                </a>
                 <button class="btn btn-secondary" onclick="exportToCSV()" title="تصدير إلى Excel/CSV">
                     <i class="fa-solid fa-file-excel" style="color: #107c41;"></i> تصدير Excel
                 </button>
@@ -1239,7 +1323,7 @@
             </div>
         </section>
 
-        <!-- Table View (Attachments column removed cleanly) -->
+        <!-- Table View -->
         <section class="tasks-container">
             <div class="table-responsive">
                 <table class="tasks-table">
@@ -1355,7 +1439,6 @@
         const STORAGE_KEY = "watania_multi_dept_tasks_v20";
         const ENTRY_KEY = "watania_portal_entered_v20";
 
-        // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
   "industrial": {
     "id": "industrial",
@@ -1511,8 +1594,6 @@
         }
 
         function loadAllData() {
-            const cloudTag = document.getElementById('cloudStatusTag');
-
             if (firebaseConfig.databaseURL) {
                 try {
                     if (!firebase.apps.length) {

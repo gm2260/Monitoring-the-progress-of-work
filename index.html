@@ -96,7 +96,7 @@
         header {
             background: var(--primary-gradient);
             color: #ffffff;
-            padding: 2.2rem 0 2.5rem;
+            padding: 2.5rem 0 3.25rem;
             box-shadow: var(--shadow-md);
             position: relative;
             overflow: hidden;
@@ -220,13 +220,75 @@
             border: 1px solid #fca5a5;
         }
 
+        /* KPI Quick Bar */
+        .portal-kpi-bar {
+            margin-top: -1.75rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .kpi-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1.15rem 1.25rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .kpi-box:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .kpi-box-info h4 {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+        }
+
+        .kpi-box-info .num {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .kpi-box-info .sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .kpi-box-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
         /* Search Launcher */
         .search-launcher-card {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
             padding: 1.25rem 1.5rem;
             border: 1px solid var(--border-color);
-            margin-top: 1.75rem;
             margin-bottom: 2rem;
             box-shadow: var(--shadow-sm);
             display: flex;
@@ -292,7 +354,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .service-card {
@@ -539,6 +601,64 @@
             align-self: flex-start;
         }
 
+        /* System Info / Guidance Card */
+        .portal-guidance-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            border-right: 6px solid var(--primary);
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2.5rem;
+        }
+
+        .portal-guidance-card h3 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .portal-guidance-card p {
+            color: #334155;
+            font-size: 0.95rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .portal-guidance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .guidance-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+        }
+
+        .guidance-item h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .guidance-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
         /* Footer */
         footer {
             background: #ffffff;
@@ -574,6 +694,9 @@
             .services-grid {
                 grid-template-columns: 1fr;
             }
+            .kpi-row {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
@@ -597,6 +720,7 @@
         <div class="container header-content">
             <div class="brand-wrapper">
                 <div class="portal-logo">
+                    <!-- شعار الشركة برابط موثوق ومسار احتياطي -->
                     <img src="https://gm2260.github.io/Dashboard3/logo.png" 
                          alt="شعار دواجن الوطنية" 
                          onerror="this.onerror=null; this.src='https://www.alwatania.com.sa/wp-content/uploads/2021/04/alwatania-logo.png';">
@@ -616,6 +740,55 @@
 
     <!-- Main Portal Content -->
     <main class="container" style="flex: 1;">
+
+        <!-- Live KPI Overview Cards -->
+        <section class="portal-kpi-bar">
+            <div class="kpi-row">
+                <div class="kpi-box" onclick="window.location.href='1.html'" style="cursor: pointer;">
+                    <div class="kpi-box-info">
+                        <h4>إجمالي مهام الإدارات</h4>
+                        <div class="num" id="totalTasksCount">59</div>
+                        <div class="sub" id="tasksCompletionRate">جارى تحميل نسبة الإنجاز...</div>
+                    </div>
+                    <div class="kpi-box-icon" style="background: #dcfce7; color: #15803d;">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-box" onclick="window.location.href='2.html'" style="cursor: pointer;">
+                    <div class="kpi-box-info">
+                        <h4>مراكز التكلفة المعتمدة</h4>
+                        <div class="num">340+</div>
+                        <div class="sub">عبر 5 شركات و 32 قسماً رئيسياً</div>
+                    </div>
+                    <div class="kpi-box-icon" style="background: #fef3c7; color: #b45309;">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-box" onclick="window.location.href='3.html'" style="cursor: pointer;">
+                    <div class="kpi-box-info">
+                        <h4>لوحات تحكم إنكورتا</h4>
+                        <div class="num" id="totalIncortaCount">9</div>
+                        <div class="sub" id="incortaReadyCount">جاهزة وقيد التحديث</div>
+                    </div>
+                    <div class="kpi-box-icon" style="background: #e0f2fe; color: #0369a1;">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-box">
+                    <div class="kpi-box-info">
+                        <h4>حالة الربط السحابي</h4>
+                        <div class="num" style="font-size: 1.25rem; color: #15803d;">مباشر 100%</div>
+                        <div class="sub">تزامن فوري عبر Firebase Database</div>
+                    </div>
+                    <div class="kpi-box-icon" style="background: #f0fdf4; color: #16a34a;">
+                        <i class="fa-solid fa-cloud-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Global Search / Quick Navigation Launcher -->
         <section class="search-launcher-card">
@@ -781,6 +954,28 @@
 
         </section>
 
+        <!-- System Guidance & Information -->
+        <section class="portal-guidance-card">
+            <h3><i class="fa-solid fa-circle-info" style="color: var(--primary);"></i> معلومات التوافق والربط السحابي للبوابة</h3>
+            <p>
+                تم تصميم هذه البوابة لتكون نقطة الانطلاق الموحدة لكافة أعمال إدارة التكاليف ومراقبة المخزون لدى شركة دواجن الوطنية. جميع الملفات مهيأة للعمل التام والسحابي عبر GitHub Pages مع المزامنة الفورية عبر قاعدة بيانات Firebase.
+            </p>
+            <div class="portal-guidance-grid">
+                <div class="guidance-item">
+                    <h4><i class="fa-solid fa-cloud-arrow-up"></i> مزامنة فورية وآمنة</h4>
+                    <p>أي إضافة أو تعديل يتم على مهام العمل أو لوحات إنكورتا ينعكس فوراً لكافة الزملاء على مختلف الأجهزة دون الحاجة لإعادة تحميل الصفحة.</p>
+                </div>
+                <div class="guidance-item">
+                    <h4><i class="fa-solid fa-mobile-screen-button"></i> متوافق مع كل الشاشات</h4>
+                    <p>واجهة متجاوبة بالكامل مصممة للعمل بكفاءة فائقة على شاشات سطح المكتب، الأجهزة اللوحية (iPad)، والهواتف الذكية.</p>
+                </div>
+                <div class="guidance-item">
+                    <h4><i class="fa-solid fa-file-export"></i> تصدير ونسخ احتياطي</h4>
+                    <p>إمكانية تصدير المهام إلى ملفات Excel/CSV وتنزيل نسخ احتياطية كاملة بنقرة زر لحفظ السجلات المحاسبية والتشغيلية.</p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -829,6 +1024,8 @@
         }
 
         function initFirebaseSync() {
+            const cloudTag = document.getElementById('cloudStatusTag');
+
             try {
                 if (!firebase.apps.length) {
                     firebase.initializeApp(firebaseConfig);
@@ -864,10 +1061,8 @@
 
         function setCloudConnected() {
             const cloudTag = document.getElementById('cloudStatusTag');
-            if (cloudTag) {
-                cloudTag.className = "cloud-badge connected";
-                cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن فوري)';
-            }
+            cloudTag.className = "cloud-badge connected";
+            cloudTag.innerHTML = '<i class="fa-solid fa-cloud-bolt"></i> متصل بالسحابة (تزامن فوري)';
         }
 
         function loadTasksFromLocal() {
@@ -904,10 +1099,9 @@
 
             if (total > 0) {
                 const rate = Math.round((done / total) * 100);
-                const card1Preview = document.getElementById('card1StatusPreview');
-                if (card1Preview) {
-                    card1Preview.textContent = `${done} مهمة منجزة من أصل ${total} (${rate}%)`;
-                }
+                document.getElementById('totalTasksCount').textContent = total;
+                document.getElementById('tasksCompletionRate').textContent = `نسبة الإنجاز: ${rate}% (${done} منجز)`;
+                document.getElementById('card1StatusPreview').textContent = `${done} مهمة منجزة من أصل ${total} (${rate}%)`;
             }
         }
 
@@ -917,12 +1111,12 @@
             const total = arr.length;
             const ready = arr.filter(d => d.status === 'ready').length;
             const updating = arr.filter(d => d.status === 'updating').length;
+            const review = arr.filter(d => d.status === 'review').length;
 
             if (total > 0) {
-                const card3Preview = document.getElementById('card3StatusPreview');
-                if (card3Preview) {
-                    card3Preview.textContent = `${ready} لوحة جاهزة | ${updating} قيد التحديث`;
-                }
+                document.getElementById('totalIncortaCount').textContent = total;
+                document.getElementById('incortaReadyCount').textContent = `${ready} جاهزة | ${updating} قيد التحديث | ${review} للمراجعة`;
+                document.getElementById('card3StatusPreview').textContent = `${ready} لوحة جاهزة | ${updating} قيد التحديث`;
             }
         }
 
