@@ -1755,7 +1755,8 @@
         // دالة تنظيف نص المهمة من أي أرقام مكررة أو سابقة نهائياً
         function cleanTaskTitle(rawTitle) {
             if (!rawTitle) return '';
-            return String(rawTitle).replace(/^(\s*\d+[\.\-\)\:\s]*)+/g, '').trim();
+            let str = String(rawTitle).trim();
+            return str.replace(/^[\s\d\u0660-\u0669\.\-\)\:\,\_]+/g, '').trim();
         }
 
         // ==========================================
@@ -2132,6 +2133,9 @@
             if (!data || typeof data !== 'object') {
                 data = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
             }
+            
+            let hasDirtyTitles = false;
+
             ['industrial', 'poultry', 'inventory'].forEach(dept => {
                 if (!data[dept]) {
                     data[dept] = { id: dept, name: DEPT_META[dept].name, tasks: [] };
@@ -2140,11 +2144,28 @@
                 } else if (!Array.isArray(data[dept].tasks)) {
                     data[dept].tasks = Object.values(data[dept].tasks);
                 }
-                // تنظيف جميع عناوين المهام المحفوظة من أي أرقام سابقة مدمجة لتظل قاعدة البيانات نقية
+                
+                // تنظيف فوري لجميع عناوين المهام المحفوظة وتجريدها تماماً من أي أرقام سابقة
                 data[dept].tasks.forEach(task => {
-                    task.title = cleanTaskTitle(task.title);
+                    const original = task.title;
+                    const cleaned = cleanTaskTitle(original);
+                    if (original !== cleaned) {
+                        task.title = cleaned;
+                        hasDirtyTitles = true;
+                    }
                 });
             });
+
+            // إذا وجدت أرقام مكررة قديمة في السحابة، يتم حفظ النسخة المنظفة فوراً في السحابة
+            if (hasDirtyTitles && isFirebaseActive && dbRef) {
+                try {
+                    const cleanCopy = JSON.parse(JSON.stringify(data));
+                    dbRef.set(cleanCopy);
+                } catch (e) {
+                    console.warn("Auto sanitize cloud sync error:", e);
+                }
+            }
+
             return data;
         }
 
@@ -2176,13 +2197,12 @@
                 try {
                     allTasksData = normalizeTasksData(JSON.parse(saved));
                 } catch (e) {
-                    allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+                    allTasksData = normalizeTasksData(JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA)));
                 }
             } else {
-                allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+                allTasksData = normalizeTasksData(JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA)));
             }
 
-            allTasksData = normalizeTasksData(allTasksData);
             saveAllData();
             updateTabBadges();
             updateKPIs();
@@ -2278,7 +2298,7 @@
                 let combined = [];
                 ['industrial', 'poultry', 'inventory'].forEach(dept => {
                     const list = allTasksData[dept]?.tasks || [];
-                    list.forEach((t, i) => {
+                    list.forEach((t) => {
                         combined.push({ ...t, deptKey: dept, deptName: DEPT_META[dept].name });
                     });
                 });
@@ -2403,7 +2423,8 @@
                 }
 
                 // عرض الرقم التسلسلي النظيف والديناميكي (1. النص المطلوب)
-                const displayTitle = `${t.originalIndex}. ${escapeHtml(cleanTaskTitle(t.title))}`;
+                const cleanText = cleanTaskTitle(t.title);
+                const displayTitle = `${t.originalIndex}. ${escapeHtml(cleanText)}`;
 
                 return `
                     <tr>
@@ -2672,7 +2693,7 @@
 
         function resetToInitialData() {
             if (confirm('هل تريد استعادة القوائم الأصلية لجميع الإدارات وإعادة تعيين أي تغييرات؟')) {
-                allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+                allTasksData = normalizeTasksData(JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA)));
                 saveAllData();
                 showToast('تمت استعادة البيانات الأصلية بنجاح', 'info');
             }
