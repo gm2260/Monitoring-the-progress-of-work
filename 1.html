@@ -1623,11 +1623,11 @@
         const STORAGE_KEY = "watania_multi_dept_tasks_v20";
         const ENTRY_KEY = "watania_portal_entered_v20";
         
-        // أقصى حجم للملف: 10 ميجابايت (يتجاوز متطلب الـ 5 ميجا بسهولة)
+        // أقصى حجم للملف: 10 ميجابايت
         const MAX_FILE_SIZE_MB = 10;
         const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-        // IndexedDB لتخزين ملفات المرفقات الكبيرة محلياً بسرعة وأمان
+        // IndexedDB للكاش المحلي
         const ATTACHMENT_DB_NAME = "WataniaTasksAttachmentsDB_v1";
         const ATTACHMENT_STORE_NAME = "attachments";
 
@@ -1753,10 +1753,11 @@
         };
 
         // ==========================================
-        // 2. دوال IndexedDB لحفظ وتحميل الملفات المرفقة
+        // 2. دوال التخزين السحابي والمحلي للمرفقات (Cloud & Local Hybrid)
         // ==========================================
         function openAttachmentsDB() {
             return new Promise((resolve, reject) => {
+                if (!window.indexedDB) return reject(new Error("IndexedDB not supported"));
                 const request = indexedDB.open(ATTACHMENT_DB_NAME, 1);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -1770,13 +1771,10 @@
         }
 
         async function saveAttachmentToDB(taskId, file) {
-            const db = await openAttachmentsDB();
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = async () => {
                     try {
-                        const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
-                        const store = tx.objectStore(ATTACHMENT_STORE_NAME);
                         const record = {
                             taskId: taskId,
                             name: file.name,
@@ -1785,9 +1783,30 @@
                             data: reader.result,
                             uploadedAt: new Date().toISOString()
                         };
-                        store.put(record);
-                        tx.oncomplete = () => resolve(record);
-                        tx.onerror = (e) => reject(e.target.error);
+
+                        // 1. حفظ في سحابة Firebase Realtime Database ليتزامن فوراً مع كافة الأجهزة والزملاء
+                        if (isFirebaseActive && firebase.apps.length) {
+                            try {
+                                const attachRef = firebase.database().ref('watania_tasks_attachments/' + taskId);
+                                await attachRef.set(record);
+                            } catch (cloudErr) {
+                                console.warn("Cloud attachment upload error:", cloudErr);
+                            }
+                        }
+
+                        // 2. حفظ نسخة في كاش المتصفح المحلي (IndexedDB)
+                        if (window.indexedDB) {
+                            try {
+                                const db = await openAttachmentsDB();
+                                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
+                                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                                store.put(record);
+                            } catch (localErr) {
+                                console.warn("IndexedDB cache save error:", localErr);
+                            }
+                        }
+
+                        resolve(record);
                     } catch (err) {
                         reject(err);
                     }
@@ -1798,27 +1817,77 @@
         }
 
         async function getAttachmentFromDB(taskId) {
-            const db = await openAttachmentsDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readonly');
-                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
-                const req = store.get(taskId);
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = (e) => reject(e.target.error);
-            });
+            // 1. محاولة الجلب أولاً من الكاش المحلي للمتصفح
+            if (window.indexedDB) {
+                try {
+                    const db = await Promise.race([
+                        openAttachmentsDB(),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 300))
+                    ]);
+                    const localRecord = await new Promise((resolve) => {
+                        const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readonly');
+                        const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                        const req = store.get(taskId);
+                        req.onsuccess = () => resolve(req.result);
+                        req.onerror = () => resolve(null);
+                    });
+
+                    if (localRecord && localRecord.data) {
+                        return localRecord;
+                    }
+                } catch (localErr) {
+                    console.log("Local cache skipped, fetching directly from Firebase cloud.");
+                }
+            }
+
+            // 2. إذا لم يكن متوفراً محلياً (مثلاً جهاز زميل آخر أو متصفح جديد)، نجلبه مباشرة من سحابة Firebase
+            if (isFirebaseActive && firebase.apps.length) {
+                try {
+                    const attachRef = firebase.database().ref('watania_tasks_attachments/' + taskId);
+                    const snapshot = await attachRef.once('value');
+                    const cloudRecord = snapshot.val();
+                    if (cloudRecord && cloudRecord.data) {
+                        // حفظ نسخة في الكاش المحلي للجهاز لتسريع التحميل مستقبلاً
+                        if (window.indexedDB) {
+                            try {
+                                const db = await openAttachmentsDB();
+                                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
+                                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                                store.put(cloudRecord);
+                            } catch (e) {}
+                        }
+                        return cloudRecord;
+                    }
+                } catch (cloudErr) {
+                    console.error("Cloud DB read error:", cloudErr);
+                }
+            }
+
+            return null;
         }
 
         async function deleteAttachmentFromDB(taskId) {
-            const db = await openAttachmentsDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
-                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
-                store.delete(taskId);
-                tx.oncomplete = () => resolve(true);
-                tx.onerror = (e) => reject(e.target.error);
-            });
+            // حذف من السحابة أولاً
+            if (isFirebaseActive && firebase.apps.length) {
+                try {
+                    const attachRef = firebase.database().ref('watania_tasks_attachments/' + taskId);
+                    await attachRef.remove();
+                } catch (e) {}
+            }
+
+            // حذف من الكاش المحلي
+            if (window.indexedDB) {
+                try {
+                    const db = await openAttachmentsDB();
+                    const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
+                    const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                    store.delete(taskId);
+                } catch (e) {}
+            }
+            return true;
         }
 
+        // ==========================================
         // دالة تنسيق حجم الملف
         function formatFileSize(bytes) {
             if (!bytes || bytes === 0) return '0 B';
@@ -1876,7 +1945,7 @@
             if (!task) return;
 
             try {
-                showToast('جاري رفع وتخزين المرفق...', 'info');
+                showToast('جاري رفع وتخزين المرفق سحابياً...', 'info');
                 await saveAttachmentToDB(task.id, file);
 
                 task.attachment = {
@@ -1905,9 +1974,9 @@
             }
 
             try {
+                showToast('جاري جلب الملف من السحابة وتحميله...', 'info');
                 const record = await getAttachmentFromDB(task.id);
                 if (record && record.data) {
-                    showToast(`جاري تحميل الملف: ${record.name}`, 'info');
                     const link = document.createElement('a');
                     link.href = record.data;
                     link.download = record.name || task.attachment.name || 'attachment';
@@ -1916,7 +1985,7 @@
                     document.body.removeChild(link);
                     showToast(`تم تحميل "${record.name}" بنجاح!`, 'success');
                 } else {
-                    alert(`الملف مسجل باسم (${task.attachment.name}) وحجم (${task.attachment.size})، ولكن لم يتم العثور على محتوى الملف في هذا المتصفح.`);
+                    alert(`عفواً، لم يتم العثور على محتوى الملف السحابي (${task.attachment.name}). يرجى التأكد من اتصال الإنترنت أو إعادة إرفاق الملف.`);
                 }
             } catch (err) {
                 console.error("Error downloading attachment:", err);
@@ -2029,7 +2098,7 @@
         // ==========================================
         function cleanTaskTitle(rawTitle) {
             if (!rawTitle) return '';
-            return String(rawTitle).replace(/^\s*\d+[\.\-\)]\s*/, '').trim();
+            return String(rawTitle).replace(/^\\s*\\d+[\\.\\-\\)]\\s*/, '').trim();
         }
 
         function reindexDepartmentTasks(deptKey) {
