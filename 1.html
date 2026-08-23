@@ -70,6 +70,55 @@
             line-height: 1.6;
         }
 
+        /* Top Navigation Bar */
+        .portal-nav-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+        }
+
+        .portal-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .portal-back-link:hover {
+            color: #157347;
+            transform: translateX(4px);
+        }
+
+        .nav-links-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link-item {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-link-item:hover, .nav-link-item.active {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
         /* Welcome Screen */
         #welcomeGateScreen {
             position: fixed;
@@ -1017,6 +1066,11 @@
         }
 
         @media (max-width: 768px) {
+            .portal-nav-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
             .header-container {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1044,6 +1098,25 @@
     </style>
 </head>
 <body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="portal-nav-bar">
+        <a href="index.html" class="portal-back-link">
+            <i class="fa-solid fa-house"></i>
+            <span>العودة إلى الشاشة الرئيسية</span>
+        </a>
+        <div class="nav-links-group">
+            <a href="1.html" class="nav-link-item active">
+                <i class="fa-solid fa-list-check"></i> متابعة المهام
+            </a>
+            <a href="2.html" class="nav-link-item">
+                <i class="fa-solid fa-calculator"></i> مراكز التكلفة
+            </a>
+            <a href="3.html" class="nav-link-item">
+                <i class="fa-solid fa-chart-pie"></i> لوحات إنكورتا
+            </a>
+        </div>
+    </nav>
 
     <!-- Welcome / Entry Screen -->
     <div id="welcomeGateScreen">
@@ -1089,6 +1162,9 @@
                 </div>
             </div>
             <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary" title="الرجوع إلى البوابة الرئيسية">
+                    <i class="fa-solid fa-house" style="color: var(--primary);"></i> الرئيسية
+                </a>
                 <button class="btn btn-secondary" onclick="exportToCSV()" title="تصدير إلى Excel/CSV">
                     <i class="fa-solid fa-file-excel" style="color: #107c41;"></i> تصدير Excel
                 </button>
@@ -1239,7 +1315,7 @@
             </div>
         </section>
 
-        <!-- Table View (Attachments column removed cleanly) -->
+        <!-- Table View -->
         <section class="tasks-container">
             <div class="table-responsive">
                 <table class="tasks-table">
@@ -1286,7 +1362,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="taskTitleInput">بيان المهمة *</label>
-                    <textarea id="taskTitleInput" class="form-control" rows="3" placeholder="أدخل بيان المهمة بالتفصيل..." required></textarea>
+                    <textarea id="taskTitleInput" class="form-control" rows="3" placeholder="أدخل بيان المهمة بدون كتابة رقم (سيتم الترقيم تلقائياً)..." required></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -1362,36 +1438,36 @@
     "name": "القسم الصناعي",
     "icon": "fa-industry",
     "tasks": [
-      {"id": "ind_1", "title": "1. ساعات تشغيل الصنف الجديد مجمد فيليه أرجل الدجاج", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_2", "title": "2. إجتماعات الإدارات ولايشترط جميع الإدارات خلال هذا الشهر .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_3", "title": "3. دراسة الفيليه والأجزاء المشكله", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_4", "title": "4. مراجعة الإنحرافات وتحليلها", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_5", "title": "5. ربحية منتجات المصنعات خلال النصف الأول 2026", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_6", "title": "6. تقرير مصاريف الكهرباء خلال 2026", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_8", "title": "8. إنشاء تقرير توزيع الكهرباء الجديد", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_9", "title": "9. إنشاء تقرير توزيع المياه الجديد", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_10", "title": "10. تقرير يوضح الصيانه على مستوي المعده ( موجود على إنكورتا) تحليله لمعرفة المعدات ذات الصيانه المرتفعه .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "ind_11", "title": "11. تقرير عدد مرات تغير زيت وتركيب كفرات وبطاريات خلال 6 شهور على مستوي المعده .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "ind_12", "title": "12. تقرير مدخلات ومخرجات البروتين", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_13", "title": "13. تعديل طريقة توزيع الكهرباء حسب المستفيد من كل محطة", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_14", "title": "14. تقرير متابعة إنتاج المنتج التام خلال الفتره قبل الإغلاق .", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_15", "title": "15. تحديث البومات ( مسالخ )", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_16", "title": "16. تحديث البومات ( مصنعات )", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_17", "title": "17. تحديث الراوتنج مسالخ", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_18", "title": "18. تحديث دراسة العلف", "status": "تم الإلغاء", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "ind_19", "title": "19. الإجراءات المترتبه علي نقل تشغيل مسلخ1 إلى مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_20", "title": "20. تعديل هيكل مراكز تكلفة إدارة الكهرباء ومتطلبات مشروع صيانة الكهرباء", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_21", "title": "21- أليه جديدة على النظام لتحميل الصويا جزء من مصاريف ينبع", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "ind_22", "title": "22- عينات من نظام العلف", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "ind_23", "title": "23- Break Even", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_24", "title": "24- تجارب التشفيه في مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_25", "title": "25- المطلوب في إيميل الورش المركزيه ( تقرير الصيانه على مستوي المعده & فترة الصيانه& عينات من الأوامر المفتوحه & مراجعة الأوامر ذات التكلفه العاليه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_26", "title": "26- هيكل مراكز التكلفه في مياه الابار", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_27", "title": "27- إعادة توزيع الجوده", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_28", "title": "28- توزيع خدمات الجدود ( ضرورة التوزيع بحسابات الخدمات) .", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_29", "title": "29- تعديل دورة توزيع الكهرباء على النظام بعد إنشاء وتعديل مراكز التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "ind_30", "title": "30- دراسة تخفيض التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "ind_31", "title": "31- دراسة تأثير الطاقه العاطله على منتجات المصنعات", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
+      {"id": "ind_1", "title": "ساعات تشغيل الصنف الجديد مجمد فيليه أرجل الدجاج", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_2", "title": "إجتماعات الإدارات ولايشترط جميع الإدارات خلال هذا الشهر .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_3", "title": "دراسة الفيليه والأجزاء المشكله", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_4", "title": "مراجعة الإنحرافات وتحليلها", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_5", "title": "ربحية منتجات المصنعات خلال النصف الأول 2026", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_6", "title": "تقرير مصاريف الكهرباء خلال 2026", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_8", "title": "إنشاء تقرير توزيع الكهرباء الجديد", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_9", "title": "إنشاء تقرير توزيع المياه الجديد", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_10", "title": "تقرير يوضح الصيانه على مستوي المعده ( موجود على إنكورتا) تحليله لمعرفة المعدات ذات الصيانه المرتفعه .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_11", "title": "تقرير عدد مرات تغير زيت وتركيب كفرات وبطاريات خلال 6 شهور على مستوي المعده .", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_12", "title": "تقرير مدخلات ومخرجات البروتين", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_13", "title": "تعديل طريقة توزيع الكهرباء حسب المستفيد من كل محطة", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_14", "title": "تقرير متابعة إنتاج المنتج التام خلال الفتره قبل الإغلاق .", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_15", "title": "تحديث البومات ( مسالخ )", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_16", "title": "تحديث البومات ( مصنعات )", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_17", "title": "تحديث الراوتنج مسالخ", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_18", "title": "تحديث دراسة العلف", "status": "تم الإلغاء", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_19", "title": "الإجراءات المترتبه علي نقل تشغيل مسلخ1 إلى مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_20", "title": "تعديل هيكل مراكز تكلفة إدارة الكهرباء ومتطلبات مشروع صيانة الكهرباء", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_21", "title": "أليه جديدة على النظام لتحميل الصويا جزء من مصاريف ينبع", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_22", "title": "عينات من نظام العلف", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "ind_23", "title": "Break Even", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_24", "title": "تجارب التشفيه في مسلخ 3", "status": "جارى العمل", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_25", "title": "المطلوب في إيميل الورش المركزيه ( تقرير الصيانه على مستوي المعده & فترة الصيانه& عينات من الأوامر المفتوحه & مراجعة الأوامر ذات التكلفه العاليه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_26", "title": "هيكل مراكز التكلفه في مياه الابار", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_27", "title": "إعادة توزيع الجوده", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_28", "title": "توزيع خدمات الجدود ( ضرورة التوزيع بحسابات الخدمات) .", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_29", "title": "تعديل دورة توزيع الكهرباء على النظام بعد إنشاء وتعديل مراكز التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "ind_30", "title": "دراسة تخفيض التكلفه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "ind_31", "title": "دراسة تأثير الطاقه العاطله على منتجات المصنعات", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
     ]
   },
   "poultry": {
@@ -1399,25 +1475,25 @@
     "name": "القسم الإنتاجي",
     "icon": "fa-egg",
     "tasks": [
-      {"id": "pou_1", "title": "1- دراسة التكلفة المعياريه للمراحل Creat Model", "status": "جارى العمل", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_2", "title": "2- دراسة تأثير ارتفاع أرسعار الخامات على تكلفة المراحل كلها", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_3", "title": "3- مشكلة حسابات إنتاج تحت التشغيل وتحميل إنحراف مرحلة ماقبل الإنتاج على حساب WiP تربيه", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_4", "title": "4- تقرير يوضح أداء القطعان على مستوي القطيع قبل إنتهائه", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_5", "title": "5- تحديث بومات البياض( أصناف الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_6", "title": "6- تحديث بومات الأمهات( الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_7", "title": "7- دورة إنتاج النخيل على النظام", "status": "تم الإلغاء", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_8", "title": "8- التحصينات اللى بيتم صرفها للجدود من الأمهات", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "pou_9", "title": "9- بيع العلف لشركة الجدود بدل من تحويله بالتكلفه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
-      {"id": "pou_10", "title": "10- موضوع إستلام بيض الفرزه في الجدود", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_11", "title": "11- إنشاء مركز تكلفة جديد للـــــــPCT في اللاحم", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_12", "title": "12- إنشاء مرحلة ماقبل الإنتاج في البياض Pre", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "pou_13", "title": "13-الوصف الوظيفي والمهام لأقسام الإدارة", "status": "تم", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_14", "title": "14- ألية متابعة إنحراف الكميه ( الإستهلاك) في أوامر الإنتاج على النظام ( أوامر الإنتاج نوع YPP4)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_15", "title": "15-تقرير أداء القطعان بالأسبوع ( معياري)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_16", "title": "16-دراسة أثر ارتفاع أسعار Cobb على تكلفة صوص الأمهات وصوص اللاحم", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_17", "title": "17- حصر متطلبات أتمتة التقارير على إنكورتا", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_18", "title": "18- دراسة تخفيض التكاليف", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "pou_19", "title": "19- دراسة تطوير المزارع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
+      {"id": "pou_1", "title": "دراسة التكلفة المعياريه للمراحل Creat Model", "status": "جارى العمل", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_2", "title": "دراسة تأثير ارتفاع أرسعار الخامات على تكلفة المراحل كلها", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_3", "title": "مشكلة حسابات إنتاج تحت التشغيل وتحميل إنحراف مرحلة ماقبل الإنتاج على حساب WiP تربيه", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_4", "title": "تقرير يوضح أداء القطعان على مستوي القطيع قبل إنتهائه", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_5", "title": "تحديث بومات البياض( أصناف الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_6", "title": "تحديث بومات الأمهات( الأدويه والتحصينات)", "status": "تم", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_7", "title": "دورة إنتاج النخيل على النظام", "status": "تم الإلغاء", "requestDate": "2026-06-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_8", "title": "التحصينات اللى بيتم صرفها للجدود من الأمهات", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "pou_9", "title": "بيع العلف لشركة الجدود بدل من تحويله بالتكلفه", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "منخفض"},
+      {"id": "pou_10", "title": "موضوع إستلام بيض الفرزه في الجدود", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_11", "title": "إنشاء مركز تكلفة جديد للـــــــPCT في اللاحم", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_12", "title": "إنشاء مرحلة ماقبل الإنتاج في البياض Pre", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "pou_13", "title": "الوصف الوظيفي والمهام لأقسام الإدارة", "status": "تم", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_14", "title": "ألية متابعة إنحراف الكميه ( الإستهلاك) في أوامر الإنتاج على النظام ( أوامر الإنتاج نوع YPP4)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_15", "title": "تقرير أداء القطعان بالأسبوع ( معياري)", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_16", "title": "دراسة أثر ارتفاع أسعار Cobb على تكلفة صوص الأمهات وصوص اللاحم", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_17", "title": "حصر متطلبات أتمتة التقارير على إنكورتا", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_18", "title": "دراسة تخفيض التكاليف", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "pou_19", "title": "دراسة تطوير المزارع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"}
     ]
   },
   "inventory": {
@@ -1425,16 +1501,16 @@
     "name": "مراقبة المخزون",
     "icon": "fa-warehouse",
     "tasks": [
-      {"id": "inv_1", "title": "1. عدادات سيارات نقل الديزل للمزارع", "status": "لم تنتهي", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "inv_2", "title": "2- مراجعة الدورة المستنديه لمرتجعات البطارات والكفرات", "status": "لم تنتهي", "requestDate": "2026-04-02", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_3", "title": "3- تغيير ألية صرف الديزل للمواقع الإنتاجيه", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_4", "title": "4- إنشاء Source List للأصناف خارج البوم", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "inv_5", "title": "5- تقرير YCO024 على إنكورتا", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_6", "title": "6- تقرير المخزون في فترات سابقه بالكرتون وبالكيلو", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_7", "title": "7- تقرير مقارنه أسعار الخامات خلال فترات زمنيه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_8", "title": "8- أليه تحديد مخزون نهاية الفتره للديزل في المواقع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
-      {"id": "inv_9", "title": "9- تقرير تكلفة التخزين", "status": "جارى العمل", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
-      {"id": "inv_10", "title": "10- إنشاء إجراء مخصص فاقد الذره في ينبع", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"}
+      {"id": "inv_1", "title": "عدادات سيارات نقل الديزل للمزارع", "status": "لم تنتهي", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_2", "title": "مراجعة الدورة المستنديه لمرتجعات البطارات والكفرات", "status": "لم تنتهي", "requestDate": "2026-04-02", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_3", "title": "تغيير ألية صرف الديزل للمواقع الإنتاجيه", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_4", "title": "إنشاء Source List للأصناف خارج البوم", "status": "تم", "requestDate": "2026-04-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_5", "title": "تقرير YCO024 على إنكورتا", "status": "لم تنتهي", "requestDate": "2026-05-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_6", "title": "تقرير المخزون في فترات سابقه بالكرتون وبالكيلو", "status": "لم تنتهي", "requestDate": "2026-07-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_7", "title": "تقرير مقارنه أسعار الخامات خلال فترات زمنيه", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_8", "title": "أليه تحديد مخزون نهاية الفتره للديزل في المواقع", "status": "لم تنتهي", "requestDate": "2026-08-01", "completionDate": "", "priority": "عاجل"},
+      {"id": "inv_9", "title": "تقرير تكلفة التخزين", "status": "جارى العمل", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"},
+      {"id": "inv_10", "title": "إنشاء إجراء مخصص فاقد الذره في ينبع", "status": "تم", "requestDate": "2026-08-01", "completionDate": "", "priority": "متوسط"}
     ]
   }
 };
@@ -1467,6 +1543,28 @@
                 icon: "fa-list-check"
             }
         };
+
+        // دالة تنظيف النص من أي ترقيم سابق
+        function cleanTaskTitle(rawTitle) {
+            if (!rawTitle) return '';
+            return String(rawTitle).replace(/^\s*\d+[\.\-\)]\s*/, '').trim();
+        }
+
+        // دالة إعادة ترقيم مهام القسم تسلسلياً 1..N
+        function reindexDepartmentTasks(deptKey) {
+            if (!allTasksData[deptKey] || !Array.isArray(allTasksData[deptKey].tasks)) return;
+            allTasksData[deptKey].tasks.forEach((task, index) => {
+                const clean = cleanTaskTitle(task.title);
+                task.title = `${index + 1}. ${clean}`;
+            });
+        }
+
+        // إعادة ترقيم كافة الأقسام
+        function reindexAllDepartments() {
+            ['industrial', 'poultry', 'inventory'].forEach(dept => {
+                reindexDepartmentTasks(dept);
+            });
+        }
 
         function checkEntryStatus() {
             const isEntered = sessionStorage.getItem(ENTRY_KEY);
@@ -1542,9 +1640,10 @@
                 }
             } else {
                 allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                saveAllData();
             }
 
+            reindexAllDepartments();
+            saveAllData();
             updateTabBadges();
             updateKPIs();
             filterAndRenderTasks();
@@ -1563,10 +1662,9 @@
                     allTasksData = normalizeTasksData(val);
                 } else {
                     allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
-                    const cleanObj = JSON.parse(JSON.stringify(allTasksData));
-                    dbRef.set(cleanObj);
                 }
 
+                reindexAllDepartments();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
                 updateTabBadges();
                 updateKPIs();
@@ -1586,6 +1684,7 @@
 
         async function saveAllData() {
             allTasksData = normalizeTasksData(allTasksData);
+            reindexAllDepartments();
             const cleanObj = JSON.parse(JSON.stringify(allTasksData));
             
             localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanObj));
@@ -1869,7 +1968,7 @@
             document.getElementById('taskIdInput').value = task.id;
             document.getElementById('taskDeptSelect').value = deptKey;
             document.getElementById('taskDeptSelect').disabled = true;
-            document.getElementById('taskTitleInput').value = task.title;
+            document.getElementById('taskTitleInput').value = cleanTaskTitle(task.title);
             document.getElementById('taskStatusInput').value = task.status;
             document.getElementById('taskPriorityInput').value = task.priority || 'متوسط';
             document.getElementById('taskRequestDateInput').value = task.requestDate || '';
@@ -1884,16 +1983,18 @@
         function saveTask() {
             const idVal = document.getElementById('taskIdInput').value;
             const deptKey = document.getElementById('taskDeptSelect').value;
-            const title = document.getElementById('taskTitleInput').value.trim();
+            const rawTitle = document.getElementById('taskTitleInput').value.trim();
             const status = document.getElementById('taskStatusInput').value;
             const priority = document.getElementById('taskPriorityInput').value;
             const requestDate = document.getElementById('taskRequestDateInput').value;
             let completionDate = document.getElementById('taskCompletionDateInput').value;
 
-            if (!title) {
+            if (!rawTitle) {
                 alert('يرجى كتابة بيان المهمة أولاً.');
                 return;
             }
+
+            const title = cleanTaskTitle(rawTitle);
 
             if (status !== 'تم' && completionDate) {
                 completionDate = '';
@@ -1919,10 +2020,9 @@
                 }
             } else {
                 const newId = `${deptKey}_${Date.now()}`;
-                const newNum = deptList.length + 1;
-                deptList.unshift({
+                deptList.push({
                     id: newId,
-                    title: `${newNum}. ${title}`,
+                    title: title,
                     status: status,
                     priority: priority,
                     requestDate: requestDate || new Date().toISOString().split('T')[0],
@@ -1945,7 +2045,7 @@
             if (confirm(`هل أنت متأكد من حذف المهمة:\n"${task.title}"`)) {
                 allTasksData[deptKey].tasks = deptList.filter(t => String(t.id) !== String(taskId));
                 saveAllData();
-                showToast('تم حذف المهمة بنجاح', 'info');
+                showToast('تم حذف المهمة وإعادة ترقيم القائمة تلقائياً', 'info');
             }
         }
 
