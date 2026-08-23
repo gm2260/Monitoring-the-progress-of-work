@@ -79,6 +79,8 @@
             justify-content: space-between;
             align-items: center;
             font-size: 0.88rem;
+            position: relative;
+            z-index: 101;
         }
 
         .portal-back-link {
@@ -864,6 +866,110 @@
             font-weight: 600;
         }
 
+        /* Attachment Styles */
+        .attachment-pill-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #f8fafc;
+            padding: 0.25rem 0.4rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            max-width: 220px;
+        }
+
+        .attachment-pill-wrapper:hover {
+            border-color: #86efac;
+            background: #f0fdf4;
+        }
+
+        .attachment-pill {
+            background: transparent;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--primary);
+            font-family: inherit;
+            font-size: 0.83rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0.2rem 0.3rem;
+            border-radius: 4px;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 170px;
+            transition: var(--transition);
+        }
+
+        .attachment-pill:hover {
+            color: #157347;
+            text-decoration: underline;
+        }
+
+        .attachment-pill .attachment-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 95px;
+        }
+
+        .attachment-pill .attachment-size {
+            font-size: 0.72rem;
+            color: #64748b;
+            font-weight: 600;
+            background: #e2e8f0;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+        }
+
+        .attachment-pill .download-icon {
+            font-size: 0.78rem;
+            color: #16a34a;
+            opacity: 0.8;
+        }
+
+        .attachment-delete-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0.2rem 0.3rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .attachment-delete-btn:hover {
+            color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .btn-attach {
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            color: var(--text-muted);
+            padding: 0.38rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+        }
+
+        .btn-attach:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #f0fdf4;
+        }
+
         .action-btn-group {
             display: flex;
             align-items: center;
@@ -990,6 +1096,15 @@
             font-size: 0.88rem;
             font-weight: 800;
             color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-label-hint {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #64748b;
         }
 
         .form-control {
@@ -1013,6 +1128,56 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+        }
+
+        /* Modal File Box */
+        .modal-file-upload-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            background: #f8fafc;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .modal-file-upload-box:hover {
+            border-color: var(--primary);
+            background: #f0fdf4;
+        }
+
+        .modal-file-preview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 1px solid #86efac;
+            padding: 0.6rem 0.85rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .modal-file-preview-info {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--primary);
+        }
+
+        .modal-file-preview-remove {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .modal-file-preview-remove:hover {
+            background: #fee2e2;
         }
 
         .modal-footer {
@@ -1052,6 +1217,16 @@
         .toast.success {
             background: #0f5132;
             border-right: 4px solid #34d399;
+        }
+
+        .toast.info {
+            background: #1e293b;
+            border-right: 4px solid #38bdf8;
+        }
+
+        .toast.error {
+            background: #991b1b;
+            border-right: 4px solid #f87171;
         }
 
         .footer {
@@ -1098,6 +1273,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Hidden file input for table attachments -->
+    <input type="file" id="tableFileInput" style="display: none;" onchange="handleTableFileSelected(event)">
 
     <!-- Top Navigation Bar -->
     <nav class="portal-nav-bar">
@@ -1315,20 +1493,21 @@
             </div>
         </section>
 
-        <!-- Table View -->
+        <!-- Table View with Attachments Column -->
         <section class="tasks-container">
             <div class="table-responsive">
                 <table class="tasks-table">
                     <thead>
                         <tr>
-                            <th style="width: 60px; text-align: center;">إنجاز</th>
-                            <th style="min-width: 320px;">البيان (اسم المهمة)</th>
-                            <th id="deptColHeader" style="width: 140px; text-align: center; display: none;">الإدارة</th>
-                            <th style="width: 140px; text-align: center;">حالة الإنجاز</th>
-                            <th style="width: 110px; text-align: center;">الأولوية</th>
-                            <th style="width: 130px; text-align: center;">تاريخ الطلب</th>
-                            <th style="width: 130px; text-align: center;">تاريخ إنتهائه</th>
-                            <th style="width: 100px; text-align: center;">إجراءات</th>
+                            <th style="width: 55px; text-align: center;">إنجاز</th>
+                            <th style="min-width: 290px;">البيان (اسم المهمة)</th>
+                            <th id="deptColHeader" style="width: 130px; text-align: center; display: none;">الإدارة</th>
+                            <th style="width: 150px; text-align: center;"><i class="fa-solid fa-paperclip"></i> المرفقات</th>
+                            <th style="width: 130px; text-align: center;">حالة الإنجاز</th>
+                            <th style="width: 105px; text-align: center;">الأولوية</th>
+                            <th style="width: 120px; text-align: center;">تاريخ الطلب</th>
+                            <th style="width: 120px; text-align: center;">تاريخ إنتهائه</th>
+                            <th style="width: 90px; text-align: center;">إجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="tasksTableBody">
@@ -1343,7 +1522,7 @@
         </section>
     </main>
 
-    <!-- Task Modal -->
+    <!-- Task Modal with File Upload Section -->
     <div class="modal-backdrop" id="taskModal">
         <div class="modal">
             <div class="modal-header">
@@ -1364,6 +1543,19 @@
                     <label class="form-label" for="taskTitleInput">بيان المهمة *</label>
                     <textarea id="taskTitleInput" class="form-control" rows="3" placeholder="أدخل بيان المهمة بدون كتابة رقم (سيتم الترقيم تلقائياً)..." required></textarea>
                 </div>
+                
+                <!-- Modal Attachment Section -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span><i class="fa-solid fa-paperclip"></i> إرفاق ملف</span>
+                        <span class="form-label-hint">الحد الأقصى: 10 ميجابايت (Excel, PDF, Word, صور...)</span>
+                    </label>
+                    <input type="file" id="modalFileInput" style="display: none;" onchange="handleModalFileSelected(event)">
+                    <div id="modalFileBoxContainer">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="taskStatusInput">حالة الإنجاز</label>
@@ -1430,6 +1622,14 @@
 
         const STORAGE_KEY = "watania_multi_dept_tasks_v20";
         const ENTRY_KEY = "watania_portal_entered_v20";
+        
+        // أقصى حجم للملف: 10 ميجابايت (يتجاوز متطلب الـ 5 ميجا بسهولة)
+        const MAX_FILE_SIZE_MB = 10;
+        const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+        // IndexedDB لتخزين ملفات المرفقات الكبيرة محلياً بسرعة وأمان
+        const ATTACHMENT_DB_NAME = "WataniaTasksAttachmentsDB_v1";
+        const ATTACHMENT_STORE_NAME = "attachments";
 
         // Initial Data for all 3 departments
         const INITIAL_DEPTS_DATA = {
@@ -1521,6 +1721,14 @@
         let currentStatusFilter = 'all';
         let allTasksData = {};
 
+        // Variables for Table Attachment Upload
+        let activeUploadDept = null;
+        let activeUploadTaskId = null;
+
+        // Variables for Modal Attachment
+        let modalSelectedFile = null;
+        let modalExistingAttachment = null;
+
         const DEPT_META = {
             "industrial": {
                 name: "القسم الصناعي",
@@ -1544,13 +1752,286 @@
             }
         };
 
-        // دالة تنظيف النص من أي ترقيم سابق
+        // ==========================================
+        // 2. دوال IndexedDB لحفظ وتحميل الملفات المرفقة
+        // ==========================================
+        function openAttachmentsDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(ATTACHMENT_DB_NAME, 1);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(ATTACHMENT_STORE_NAME)) {
+                        db.createObjectStore(ATTACHMENT_STORE_NAME, { keyPath: 'taskId' });
+                    }
+                };
+                request.onsuccess = (e) => resolve(e.target.result);
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function saveAttachmentToDB(taskId, file) {
+            const db = await openAttachmentsDB();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
+                        const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                        const record = {
+                            taskId: taskId,
+                            name: file.name,
+                            type: file.type || 'application/octet-stream',
+                            size: file.size,
+                            data: reader.result,
+                            uploadedAt: new Date().toISOString()
+                        };
+                        store.put(record);
+                        tx.oncomplete = () => resolve(record);
+                        tx.onerror = (e) => reject(e.target.error);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = (e) => reject(e.target.error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function getAttachmentFromDB(taskId) {
+            const db = await openAttachmentsDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readonly');
+                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                const req = store.get(taskId);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function deleteAttachmentFromDB(taskId) {
+            const db = await openAttachmentsDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(ATTACHMENT_STORE_NAME, 'readwrite');
+                const store = tx.objectStore(ATTACHMENT_STORE_NAME);
+                store.delete(taskId);
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        // دالة تنسيق حجم الملف
+        function formatFileSize(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // دالة تحديد أيقونة الملف بناءً على الامتداد
+        function getFileIconHtml(fileName) {
+            if (!fileName) return '<i class="fa-solid fa-paperclip" style="color: var(--primary);"></i>';
+            const ext = fileName.split('.').pop().toLowerCase();
+            if (['xlsx', 'xls', 'csv'].includes(ext)) {
+                return '<i class="fa-solid fa-file-excel" style="color: #107c41;"></i>';
+            } else if (ext === 'pdf') {
+                return '<i class="fa-solid fa-file-pdf" style="color: #e11d48;"></i>';
+            } else if (['docx', 'doc'].includes(ext)) {
+                return '<i class="fa-solid fa-file-word" style="color: #2563eb;"></i>';
+            } else if (['pptx', 'ppt'].includes(ext)) {
+                return '<i class="fa-solid fa-file-powerpoint" style="color: #ea580c;"></i>';
+            } else if (['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'].includes(ext)) {
+                return '<i class="fa-solid fa-file-image" style="color: #8b5cf6;"></i>';
+            } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
+                return '<i class="fa-solid fa-file-zipper" style="color: #d97706;"></i>';
+            } else {
+                return '<i class="fa-solid fa-file-lines" style="color: #64748b;"></i>';
+            }
+        }
+
+        // ==========================================
+        // 3. إدارة رفع وتحميل وحذف المرفقات
+        // ==========================================
+        function triggerTaskFileUpload(deptKey, taskId) {
+            activeUploadDept = deptKey;
+            activeUploadTaskId = taskId;
+            const input = document.getElementById('tableFileInput');
+            input.value = '';
+            input.click();
+        }
+
+        async function handleTableFileSelected(event) {
+            const file = event.target.files[0];
+            if (!file || !activeUploadDept || !activeUploadTaskId) return;
+
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                alert(`عفواً، حجم الملف المرفق (${formatFileSize(file.size)}) يتجاوز الحد الأقصى المسموح به (${MAX_FILE_SIZE_MB} ميجابايت).`);
+                return;
+            }
+
+            const deptList = allTasksData[activeUploadDept]?.tasks;
+            if (!deptList) return;
+
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(activeUploadTaskId)) : null;
+            if (!task) return;
+
+            try {
+                showToast('جاري رفع وتخزين المرفق...', 'info');
+                await saveAttachmentToDB(task.id, file);
+
+                task.attachment = {
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.type || 'application/octet-stream',
+                    uploadedAt: new Date().toISOString().split('T')[0]
+                };
+
+                await saveAllData();
+                showToast(`تم إرفاق الملف "${file.name}" بنجاح!`, 'success');
+            } catch (err) {
+                console.error("Error saving attachment:", err);
+                showToast('حدث خطأ أثناء حفظ الملف المرفق', 'error');
+            }
+        }
+
+        async function downloadTaskAttachment(deptKey, taskId) {
+            const deptList = allTasksData[deptKey]?.tasks;
+            if (!deptList) return;
+
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
+            if (!task || !task.attachment) {
+                showToast('لا يوجد ملف مرفق لهذه المهمة', 'error');
+                return;
+            }
+
+            try {
+                const record = await getAttachmentFromDB(task.id);
+                if (record && record.data) {
+                    showToast(`جاري تحميل الملف: ${record.name}`, 'info');
+                    const link = document.createElement('a');
+                    link.href = record.data;
+                    link.download = record.name || task.attachment.name || 'attachment';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast(`تم تحميل "${record.name}" بنجاح!`, 'success');
+                } else {
+                    alert(`الملف مسجل باسم (${task.attachment.name}) وحجم (${task.attachment.size})، ولكن لم يتم العثور على محتوى الملف في هذا المتصفح.`);
+                }
+            } catch (err) {
+                console.error("Error downloading attachment:", err);
+                showToast('حدث خطأ أثناء محاولة تحميل المرفق', 'error');
+            }
+        }
+
+        async function removeTaskAttachment(deptKey, taskId) {
+            const deptList = allTasksData[deptKey]?.tasks;
+            if (!deptList) return;
+
+            const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
+            if (!task || !task.attachment) return;
+
+            if (confirm(`هل أنت متأكد من حذف المرفق (${task.attachment.name}) من هذه المهمة؟`)) {
+                try {
+                    await deleteAttachmentFromDB(task.id);
+                    delete task.attachment;
+                    await saveAllData();
+                    showToast('تم حذف المرفق بنجاح', 'info');
+                } catch (err) {
+                    console.error("Error removing attachment:", err);
+                    delete task.attachment;
+                    await saveAllData();
+                    showToast('تم حذف المرفق', 'info');
+                }
+            }
+        }
+
+        // ==========================================
+        // 4. معالجة مرفقات الـ Modal
+        // ==========================================
+        function renderModalAttachmentBox() {
+            const container = document.getElementById('modalFileBoxContainer');
+            if (modalSelectedFile) {
+                container.innerHTML = `
+                    <div class="modal-file-preview">
+                        <div class="modal-file-preview-info">
+                            ${getFileIconHtml(modalSelectedFile.name)}
+                            <span>${escapeHtml(modalSelectedFile.name)}</span>
+                            <span class="attachment-size">${formatFileSize(modalSelectedFile.size)}</span>
+                        </div>
+                        <button type="button" class="modal-file-preview-remove" onclick="removeModalSelectedFile()" title="إلغاء الملف">
+                            <i class="fa-solid fa-trash-can"></i> إزالة
+                        </button>
+                    </div>
+                `;
+            } else if (modalExistingAttachment) {
+                container.innerHTML = `
+                    <div class="modal-file-preview">
+                        <div class="modal-file-preview-info">
+                            ${getFileIconHtml(modalExistingAttachment.name)}
+                            <span>${escapeHtml(modalExistingAttachment.name)}</span>
+                            <span class="attachment-size">${modalExistingAttachment.size}</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <button type="button" class="btn-attach" onclick="triggerModalFileInput()" style="padding: 0.25rem 0.5rem; font-size: 0.78rem;">
+                                <i class="fa-solid fa-arrows-rotate"></i> تغيير
+                            </button>
+                            <button type="button" class="modal-file-preview-remove" onclick="removeModalExistingAttachment()" title="حذف المرفق">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="modal-file-upload-box" onclick="triggerModalFileInput()">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 0.3rem;"></i>
+                        <p style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin: 0;">اضغط هنا لاختيار ملف من جهازك</p>
+                        <p style="font-size: 0.76rem; color: var(--text-muted); margin: 0.2rem 0 0 0;">(Excel, PDF, Word, صور... حتى 10 ميجا)</p>
+                    </div>
+                `;
+            }
+        }
+
+        function triggerModalFileInput() {
+            const input = document.getElementById('modalFileInput');
+            input.value = '';
+            input.click();
+        }
+
+        function handleModalFileSelected(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                alert(`عفواً، حجم الملف المرفق (${formatFileSize(file.size)}) يتجاوز الحد الأقصى المسموح به (${MAX_FILE_SIZE_MB} ميجابايت).`);
+                return;
+            }
+
+            modalSelectedFile = file;
+            modalExistingAttachment = null;
+            renderModalAttachmentBox();
+        }
+
+        function removeModalSelectedFile() {
+            modalSelectedFile = null;
+            renderModalAttachmentBox();
+        }
+
+        function removeModalExistingAttachment() {
+            modalExistingAttachment = null;
+            modalSelectedFile = null;
+            renderModalAttachmentBox();
+        }
+
+        // ==========================================
+        // 5. الترقيم والتنظيف وإدارة المهام
+        // ==========================================
         function cleanTaskTitle(rawTitle) {
             if (!rawTitle) return '';
             return String(rawTitle).replace(/^\s*\d+[\.\-\)]\s*/, '').trim();
         }
 
-        // دالة إعادة ترقيم مهام القسم تسلسلياً 1..N
         function reindexDepartmentTasks(deptKey) {
             if (!allTasksData[deptKey] || !Array.isArray(allTasksData[deptKey].tasks)) return;
             allTasksData[deptKey].tasks.forEach((task, index) => {
@@ -1559,7 +2040,6 @@
             });
         }
 
-        // إعادة ترقيم كافة الأقسام
         function reindexAllDepartments() {
             ['industrial', 'poultry', 'inventory'].forEach(dept => {
                 reindexDepartmentTasks(dept);
@@ -1789,7 +2269,8 @@
                     const matchTitle = (t.title || '').toLowerCase().includes(searchVal);
                     const matchDate = (t.requestDate && t.requestDate.includes(searchVal)) || (t.completionDate && t.completionDate.includes(searchVal));
                     const matchDept = (t.deptName && t.deptName.toLowerCase().includes(searchVal));
-                    return matchTitle || matchDate || matchDept;
+                    const matchAtt = (t.attachment && t.attachment.name && t.attachment.name.toLowerCase().includes(searchVal));
+                    return matchTitle || matchDate || matchDept || matchAtt;
                 }
                 return true;
             });
@@ -1837,6 +2318,31 @@
                     </td>
                 ` : '';
 
+                // خلية المرفقات
+                let attachmentCellHtml = '';
+                if (t.attachment && t.attachment.name) {
+                    attachmentCellHtml = `
+                        <div class="attachment-pill-wrapper">
+                            <button class="attachment-pill" onclick="downloadTaskAttachment('${t.deptKey}', '${t.id}')" title="انقر لتحميل: ${escapeHtml(t.attachment.name)} (${t.attachment.size})">
+                                ${getFileIconHtml(t.attachment.name)}
+                                <span class="attachment-name" title="${escapeHtml(t.attachment.name)}">${escapeHtml(t.attachment.name)}</span>
+                                <span class="attachment-size">${t.attachment.size}</span>
+                                <i class="fa-solid fa-download download-icon"></i>
+                            </button>
+                            <button class="attachment-delete-btn" onclick="removeTaskAttachment('${t.deptKey}', '${t.id}')" title="حذف المرفق">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    attachmentCellHtml = `
+                        <button class="btn-attach" onclick="triggerTaskFileUpload('${t.deptKey}', '${t.id}')" title="إرفاق ملف (الحد الأقصى ${MAX_FILE_SIZE_MB} ميجابايت)">
+                            <i class="fa-solid fa-paperclip"></i>
+                            <span>إرفاق ملف</span>
+                        </button>
+                    `;
+                }
+
                 return `
                     <tr>
                         <td style="text-align: center;">
@@ -1850,6 +2356,9 @@
                             <div class="task-title ${isDone ? 'is-done-text' : ''}">${escapeHtml(t.title)}</div>
                         </td>
                         ${deptCell}
+                        <td style="text-align: center;">
+                            ${attachmentCellHtml}
+                        </td>
                         <td style="text-align: center;">
                             <span class="badge ${statusBadgeClass} clickable-badge" 
                                   onclick="cycleTaskStatus('${t.deptKey}', '${t.id}')"
@@ -1954,6 +2463,11 @@
             document.getElementById('taskPriorityInput').value = 'متوسط';
             document.getElementById('taskRequestDateInput').value = new Date().toISOString().split('T')[0];
             document.getElementById('taskCompletionDateInput').value = '';
+            
+            modalSelectedFile = null;
+            modalExistingAttachment = null;
+            renderModalAttachmentBox();
+            
             document.getElementById('taskModal').classList.add('active');
         }
 
@@ -1973,6 +2487,11 @@
             document.getElementById('taskPriorityInput').value = task.priority || 'متوسط';
             document.getElementById('taskRequestDateInput').value = task.requestDate || '';
             document.getElementById('taskCompletionDateInput').value = task.completionDate || '';
+            
+            modalSelectedFile = null;
+            modalExistingAttachment = task.attachment ? { ...task.attachment } : null;
+            renderModalAttachmentBox();
+            
             document.getElementById('taskModal').classList.add('active');
         }
 
@@ -1980,7 +2499,7 @@
             document.getElementById('taskModal').classList.remove('active');
         }
 
-        function saveTask() {
+        async function saveTask() {
             const idVal = document.getElementById('taskIdInput').value;
             const deptKey = document.getElementById('taskDeptSelect').value;
             const rawTitle = document.getElementById('taskTitleInput').value.trim();
@@ -2016,26 +2535,63 @@
                     task.priority = priority;
                     task.requestDate = requestDate;
                     task.completionDate = completionDate;
+
+                    // معالجة المرفق في التعديل
+                    if (modalSelectedFile) {
+                        try {
+                            await saveAttachmentToDB(task.id, modalSelectedFile);
+                            task.attachment = {
+                                name: modalSelectedFile.name,
+                                size: formatFileSize(modalSelectedFile.size),
+                                type: modalSelectedFile.type || 'application/octet-stream',
+                                uploadedAt: new Date().toISOString().split('T')[0]
+                            };
+                        } catch (err) {
+                            console.error("Error updating attachment:", err);
+                        }
+                    } else if (!modalExistingAttachment && task.attachment) {
+                        try {
+                            await deleteAttachmentFromDB(task.id);
+                        } catch (e) {}
+                        delete task.attachment;
+                    }
+
                     showToast('تم تعديل المهمة وحفظها بنجاح', 'success');
                 }
             } else {
                 const newId = `${deptKey}_${Date.now()}`;
-                deptList.push({
+                const newTask = {
                     id: newId,
                     title: title,
                     status: status,
                     priority: priority,
                     requestDate: requestDate || new Date().toISOString().split('T')[0],
                     completionDate: completionDate
-                });
+                };
+
+                if (modalSelectedFile) {
+                    try {
+                        await saveAttachmentToDB(newId, modalSelectedFile);
+                        newTask.attachment = {
+                            name: modalSelectedFile.name,
+                            size: formatFileSize(modalSelectedFile.size),
+                            type: modalSelectedFile.type || 'application/octet-stream',
+                            uploadedAt: new Date().toISOString().split('T')[0]
+                        };
+                    } catch (err) {
+                        console.error("Error saving new task attachment:", err);
+                    }
+                }
+
+                deptList.push(newTask);
                 showToast('تمت إضافة المهمة وحفظها بنجاح', 'success');
             }
 
-            saveAllData();
+            await saveAllData();
             closeTaskModal();
         }
 
-        function deleteTask(deptKey, taskId) {
+        async function deleteTask(deptKey, taskId) {
             const deptList = allTasksData[deptKey]?.tasks;
             if (!deptList) return;
 
@@ -2043,8 +2599,11 @@
             if (!task) return;
 
             if (confirm(`هل أنت متأكد من حذف المهمة:\n"${task.title}"`)) {
+                try {
+                    await deleteAttachmentFromDB(taskId);
+                } catch (e) {}
                 allTasksData[deptKey].tasks = deptList.filter(t => String(t.id) !== String(taskId));
-                saveAllData();
+                await saveAllData();
                 showToast('تم حذف المهمة وإعادة ترقيم القائمة تلقائياً', 'info');
             }
         }
@@ -2060,12 +2619,13 @@
         function exportToCSV() {
             const currentList = getActiveDepartmentTasks();
             let csvContent = "\uFEFF";
-            csvContent += "م,البيان,الإدارة,حالة الإنجاز,الأولوية,تاريخ الطلب,تاريخ إنتهائه\n";
+            csvContent += "م,البيان,الإدارة,المرفق,حالة الإنجاز,الأولوية,تاريخ الطلب,تاريخ إنتهائه\n";
 
             currentList.forEach((t, index) => {
                 const cleanTitle = `"${(t.title || '').replace(/"/g, '""')}"`;
                 const cleanDept = `"${t.deptName || ''}"`;
-                csvContent += `${index + 1},${cleanTitle},${cleanDept},"${t.status}","${t.priority || ''}","${t.requestDate || ''}","${t.completionDate || ''}"\n`;
+                const cleanAtt = `"${(t.attachment && t.attachment.name) ? t.attachment.name + ' (' + t.attachment.size + ')' : 'لا يوجد'}"`;
+                csvContent += `${index + 1},${cleanTitle},${cleanDept},${cleanAtt},"${t.status}","${t.priority || ''}","${t.requestDate || ''}","${t.completionDate || ''}"\n`;
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
