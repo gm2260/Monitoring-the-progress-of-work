@@ -1631,7 +1631,7 @@
         const ATTACHMENT_DB_NAME = "WataniaTasksAttachmentsDB_v1";
         const ATTACHMENT_STORE_NAME = "attachments";
 
-        // Initial Data for all 3 departments
+        // البيانات الأولية لجميع الأقسام (نصوص نظيفة بدون أرقام مدمجة)
         const INITIAL_DEPTS_DATA = {
   "industrial": {
     "id": "industrial",
@@ -1752,6 +1752,12 @@
             }
         };
 
+        // دالة تنظيف نص المهمة من أي أرقام مكررة أو سابقة نهائياً
+        function cleanTaskTitle(rawTitle) {
+            if (!rawTitle) return '';
+            return String(rawTitle).replace(/^(\s*\d+[\.\-\)\:\s]*)+/g, '').trim();
+        }
+
         // ==========================================
         // 2. دوال التخزين السحابي والمحلي للمرفقات (Cloud & Local Hybrid)
         // ==========================================
@@ -1840,7 +1846,7 @@
                 }
             }
 
-            // 2. إذا لم يكن متوفراً محلياً (مثلاً جهاز زميل آخر أو متصفح جديد)، نجلبه مباشرة من سحابة Firebase
+            // 2. إذا لم يتوفر محلياً (مثلاً جهاز زميل آخر أو متصفح جديد)، نجلبه مباشرة من سحابة Firebase
             if (isFirebaseActive && firebase.apps.length) {
                 try {
                     const attachRef = firebase.database().ref('watania_tasks_attachments/' + taskId);
@@ -2094,27 +2100,8 @@
         }
 
         // ==========================================
-        // 5. الترقيم والتنظيف وإدارة المهام
+        // 5. إدارة بيانات المهام والواجهة
         // ==========================================
-        function cleanTaskTitle(rawTitle) {
-            if (!rawTitle) return '';
-            return String(rawTitle).replace(/^\\s*\\d+[\\.\\-\\)]\\s*/, '').trim();
-        }
-
-        function reindexDepartmentTasks(deptKey) {
-            if (!allTasksData[deptKey] || !Array.isArray(allTasksData[deptKey].tasks)) return;
-            allTasksData[deptKey].tasks.forEach((task, index) => {
-                const clean = cleanTaskTitle(task.title);
-                task.title = `${index + 1}. ${clean}`;
-            });
-        }
-
-        function reindexAllDepartments() {
-            ['industrial', 'poultry', 'inventory'].forEach(dept => {
-                reindexDepartmentTasks(dept);
-            });
-        }
-
         function checkEntryStatus() {
             const isEntered = sessionStorage.getItem(ENTRY_KEY);
             if (isEntered === 'true') {
@@ -2143,7 +2130,7 @@
 
         function normalizeTasksData(data) {
             if (!data || typeof data !== 'object') {
-                return JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+                data = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
             }
             ['industrial', 'poultry', 'inventory'].forEach(dept => {
                 if (!data[dept]) {
@@ -2153,6 +2140,10 @@
                 } else if (!Array.isArray(data[dept].tasks)) {
                     data[dept].tasks = Object.values(data[dept].tasks);
                 }
+                // تنظيف جميع عناوين المهام المحفوظة من أي أرقام سابقة مدمجة لتظل قاعدة البيانات نقية
+                data[dept].tasks.forEach(task => {
+                    task.title = cleanTaskTitle(task.title);
+                });
             });
             return data;
         }
@@ -2191,7 +2182,7 @@
                 allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
             }
 
-            reindexAllDepartments();
+            allTasksData = normalizeTasksData(allTasksData);
             saveAllData();
             updateTabBadges();
             updateKPIs();
@@ -2210,10 +2201,9 @@
                 if (val) {
                     allTasksData = normalizeTasksData(val);
                 } else {
-                    allTasksData = JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA));
+                    allTasksData = normalizeTasksData(JSON.parse(JSON.stringify(INITIAL_DEPTS_DATA)));
                 }
 
-                reindexAllDepartments();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasksData));
                 updateTabBadges();
                 updateKPIs();
@@ -2233,7 +2223,6 @@
 
         async function saveAllData() {
             allTasksData = normalizeTasksData(allTasksData);
-            reindexAllDepartments();
             const cleanObj = JSON.parse(JSON.stringify(allTasksData));
             
             localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanObj));
@@ -2289,7 +2278,7 @@
                 let combined = [];
                 ['industrial', 'poultry', 'inventory'].forEach(dept => {
                     const list = allTasksData[dept]?.tasks || [];
-                    list.forEach(t => {
+                    list.forEach((t, i) => {
                         combined.push({ ...t, deptKey: dept, deptName: DEPT_META[dept].name });
                     });
                 });
@@ -2331,11 +2320,12 @@
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
             const priorityVal = document.getElementById('priorityFilter').value;
 
-            const filtered = rawList.filter(t => {
+            const filtered = rawList.map((t, index) => ({ ...t, originalIndex: index + 1 })).filter(t => {
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 if (priorityVal !== 'all' && t.priority !== priorityVal) return false;
                 if (searchVal) {
-                    const matchTitle = (t.title || '').toLowerCase().includes(searchVal);
+                    const cleanTitleText = cleanTaskTitle(t.title).toLowerCase();
+                    const matchTitle = cleanTitleText.includes(searchVal) || String(t.originalIndex) === searchVal;
                     const matchDate = (t.requestDate && t.requestDate.includes(searchVal)) || (t.completionDate && t.completionDate.includes(searchVal));
                     const matchDept = (t.deptName && t.deptName.toLowerCase().includes(searchVal));
                     const matchAtt = (t.attachment && t.attachment.name && t.attachment.name.toLowerCase().includes(searchVal));
@@ -2412,6 +2402,9 @@
                     `;
                 }
 
+                // عرض الرقم التسلسلي النظيف والديناميكي (1. النص المطلوب)
+                const displayTitle = `${t.originalIndex}. ${escapeHtml(cleanTaskTitle(t.title))}`;
+
                 return `
                     <tr>
                         <td style="text-align: center;">
@@ -2422,7 +2415,7 @@
                             </button>
                         </td>
                         <td>
-                            <div class="task-title ${isDone ? 'is-done-text' : ''}">${escapeHtml(t.title)}</div>
+                            <div class="task-title ${isDone ? 'is-done-text' : ''}">${displayTitle}</div>
                         </td>
                         ${deptCell}
                         <td style="text-align: center;">
@@ -2667,7 +2660,7 @@
             const task = Array.isArray(deptList) ? deptList.find(t => String(t.id) === String(taskId)) : null;
             if (!task) return;
 
-            if (confirm(`هل أنت متأكد من حذف المهمة:\n"${task.title}"`)) {
+            if (confirm(`هل أنت متأكد من حذف المهمة:\n"${cleanTaskTitle(task.title)}"`)) {
                 try {
                     await deleteAttachmentFromDB(taskId);
                 } catch (e) {}
@@ -2691,7 +2684,7 @@
             csvContent += "م,البيان,الإدارة,المرفق,حالة الإنجاز,الأولوية,تاريخ الطلب,تاريخ إنتهائه\n";
 
             currentList.forEach((t, index) => {
-                const cleanTitle = `"${(t.title || '').replace(/"/g, '""')}"`;
+                const cleanTitle = `"${index + 1}. ${(cleanTaskTitle(t.title) || '').replace(/"/g, '""')}"`;
                 const cleanDept = `"${t.deptName || ''}"`;
                 const cleanAtt = `"${(t.attachment && t.attachment.name) ? t.attachment.name + ' (' + t.attachment.size + ')' : 'لا يوجد'}"`;
                 csvContent += `${index + 1},${cleanTitle},${cleanDept},${cleanAtt},"${t.status}","${t.priority || ''}","${t.requestDate || ''}","${t.completionDate || ''}"\n`;
